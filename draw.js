@@ -1,8 +1,5 @@
-module.exports = function (cacheDir) {
-
-    const fetch = require('./node-fetch')
-    let print = require('./dev-printer')
-    print('cacheDir:' + cacheDir);
+module.exports = function (fetch_code) {
+    let print = require('./dev-printer')()
 
     let build = (code) => {
         let fun = (new Function(`return (${code})`))();
@@ -10,27 +7,14 @@ module.exports = function (cacheDir) {
         return fun;
     }
 
-    // check memory cache for function and return it, else
-    // load file text
-    // replace all ` with \`
-    // cache += return new Function('i',code)
-    // start async persistent_cache update(function text)
-    // goto check :)
-
-    return function (dependency) {
-        if (dependency === 'flush') {
-            print('swish! n depenencies saved to disk!');
-            return Promise.resolve(() => { });
-        } else {
-            print('you used pokeball to catch [' + dependency + '] !!');
-            return fetch(dependency)
-                .then((code) => {
-                    print('got text: ' + code);
-                    return build(code);
-                })
-                .catch((oops) => {
-                    print('oops:' + oops);
-                })
-        }
-    };
+    return function (resourcePath) {
+        return fetch_code(resourcePath)
+            .then((code) => {
+                print('drew from cache : ' + code);
+                return build(code);
+            })
+            .catch((oops) => {
+                print('draw oops:' + oops);
+            })
+    }
 }
