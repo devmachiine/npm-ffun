@@ -13,16 +13,12 @@ module.exports = function (cacheFile) {
     // start async persistent_cache update(function text)
     // goto check :)
 
-    //let memory cache..
-
-    //let disk cache..
-
     //fetch from web.
 
-    return function (dependency) {
+    let web_fetch = function (dependency) {
 
         print('you used pokeball to catch [' + dependency + '] !!');
-        
+
         return fetch(dependency)
             .then((code) => {
                 print('got function: ' + code);
@@ -33,4 +29,27 @@ module.exports = function (cacheFile) {
             })
     };
 
+    //let disk cache..
+
+    //let memory cache..
+    let memCache = new Map()
+
+    let mem_fetch = (key) => memCache.get(key)
+    let mem_add = (key, value) => memCache.set(key, value)
+
+    // let toBase64Key..
+
+    return (dependency) => {
+
+        let memVal = mem_fetch(dependency);
+
+        if (!memVal) {
+            print(`didn't find it in the cache, pulling it from the web`)
+            let web_val = web_fetch(dependency)
+            mem_add(dependency, web_val)
+            memVal = web_val
+        } else print(`loaded cached value !`)
+
+        return memVal
+    }
 }
