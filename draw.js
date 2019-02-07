@@ -1,20 +1,14 @@
 module.exports = function (cacheDir) {
 
     const fetch = require('./node-fetch')
-
-    let build = (code) => (new Function(`return (${code})`))();
-
-    let printStuff = true
-    let print = (message) => {
-        if (printStuff) {
-            console.log(message);
-            if (Math.random() < 0.1) {
-                console.log(`it's super effective!`);
-            }
-        }
-    }
-
+    let print = require('./dev-printer')
     print('cacheDir:' + cacheDir);
+
+    let build = (code) => {
+        let fun = (new Function(`return (${code})`))();
+        fun.ff = (treetop) => print('ff passing not ready for sir/lady ~' + treetop);
+        return fun;
+    }
 
     // check memory cache for function and return it, else
     // load file text
