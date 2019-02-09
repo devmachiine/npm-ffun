@@ -2,6 +2,7 @@ module.exports = function (fetch_code) {
     let print = require('./dev-printer')()
 
     let build = (code) => {
+        // todo ? replace all ` with \`
         let fun = (new Function(`return (${code})`))();
         fun.ff = (treetop) => print('ff passing not ready for sir/lady ~' + treetop);
         return fun;
