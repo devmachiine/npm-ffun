@@ -53,9 +53,12 @@ module.exports = function (cacheDir) {
         })
     })
 
+    // todo folder(s) for file 
+    // let toBase64Key..
     let convertKeyToFilePath = (key) => cacheDir + '/test.internal' // or .external for remote dependency
+
     let disk_fetch = (file) => new Promise((resolve, reject) => {
-        
+
         print(`disk read file = ${file}`)
         fileExists(file).then((exists) => {
             if (exists) {
@@ -75,43 +78,27 @@ module.exports = function (cacheDir) {
         });
     })
 
-    //let memory cache..
-    let memCache = new Map()
-
-    let mem_fetch = (key) => memCache.get(key)
-    let mem_add = (key, value) => memCache.set(key, value)
-
-    // let toBase64Key..
-
-    let lookup = (dependency) => {
-
+    let disk_or_web = dependency => {
+        print(`didn't find it in memory, pulling it from the filesystem`)
+        
         let keyPath = convertKeyToFilePath(dependency)
 
-        let memVal = mem_fetch(keyPath);
+        return disk_fetch(keyPath).then((diskVal) => {
 
-        if (!memVal) {
-            print(`didn't find it in memory, pulling it from the filesystem`)
+            print(` -- disk val -> ${diskVal}`)
+            if (diskVal) {
+                print('read value from disk: ' + diskVal)
+                return Promise.resolve(diskVal)
+            } else {
+                print(`didn't find it on the filesystem, pulling it from the web`)
+                return web_fetch(dependency).then((val) => disk_add(keyPath, val))
+            }
 
-            return disk_fetch(keyPath).then((diskVal) => {
-
-                print(` -- disk val -> ${diskVal}`)
-                if (diskVal) {
-                    print('read value from disk: ' + diskVal)
-                    // load to memory
-                    mem_add(keyPath, diskVal)
-                    memVal = diskVal
-                    return Promise.resolve(memVal)
-                } else {
-                    print(`didn't find it on the filesystem, pulling it from the web`)
-                    return web_fetch(dependency).then((web_val) => {
-                        mem_add(keyPath, web_val)
-                        return web_val
-                    }).then((val) => disk_add(keyPath, val))
-                }
-
-            }).catch(err => print('oh file.. ' + err))
-        } else return Promise.resolve(memVal)
+        }).catch(err => print('oh file.. ' + err))
     }
+
+    //let memory cache..
+    let lookup = require('./cache/memory')(disk_or_web)
 
     return lookup
 }
