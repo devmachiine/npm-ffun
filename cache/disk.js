@@ -46,9 +46,9 @@ module.exports = function (cacheDir, fetch_value) {
         });
     })
 
-    // todo folder(s) for file 
-    // let toBase64Key..
-    let convertKeyToFilePath = (key) => cacheDir + '/test.internal.txt' // or .external for remote dependency
+    let toFileName = (data) => data.replace(/\//g, '-').replace(/\:/g, '_')
+    let convertKeyToFilePath = (key) => `${cacheDir}/${toFileName(key)}.txt`
+    // todo folder(s) for files // or .external for remote dependency
 
     let lookup = dependency => {
         print(`didn't find it in memory, pulling it from the filesystem`)
