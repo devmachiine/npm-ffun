@@ -1,10 +1,8 @@
 module.exports = function (cacheDir, fetch_value) {
 
     const fs = require('fs')
-    let print = require('../dev-printer')()
 
     // Init file cache
-    print('disk cache dir:' + cacheDir)
 
     if (!fs.existsSync(cacheDir)) {
         fs.mkdirSync(cacheDir);
@@ -23,23 +21,21 @@ module.exports = function (cacheDir, fetch_value) {
 
     let toFileName = (data) => data.replace(/\//g, '-').replace(/\:/g, '_')
 
-    let convertKeyToFilePath = (key) => `${cacheDir}/${toFileName(key)}.txt`
-    // todo folder(s) for files // or .external for remote dependency
+    let convertToFilename = (key) => `${cacheDir}/${toFileName(key)}.txt`
+    // todo folder(s) for files and .external for remote dependency
 
     let lookup = dependency => {
 
-        let keyPath = convertKeyToFilePath(dependency)
+        let filename = convertToFilename(dependency)
 
-        return disk_fetch(keyPath).then((diskVal) => {
-            if (diskVal) {
-                print('disk retrieved: ' + diskVal)
-                return Promise.resolve(diskVal)
+        return disk_fetch(filename).then((disk_val) => {
+            if (disk_val) {
+                return Promise.resolve(disk_val)
             } else {
-                print(`disk seek`)
-                return fetch_value(dependency).then((val) => disk_add(keyPath, val))
+                return fetch_value(dependency).then((val) => disk_add(filename, val))
             }
 
-        }).catch(err => print('disk cache error -> ' + err))
+        }).catch(err => 'disk cache error -> ' + err)
     }
 
     return lookup
