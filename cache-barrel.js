@@ -9,5 +9,12 @@ module.exports = function (cacheDir) {
     // behind the memory cache
     let lookup = require('./cache/memory')(disk_or_web)
 
-    return lookup
+    // todo resolver for extenal relative named functions
+    // ex: function on example.com/funcAbc calls function (./function2)
+    //     then (/.function2) is resolved to example.com/demo2/etc5xyz.js
+    let resolve_name = (dependency) => {
+        return Promise.resolve(dependency).then((key) => lookup(key))
+    }
+
+    return resolve_name
 }
