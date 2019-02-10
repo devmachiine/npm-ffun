@@ -4,7 +4,7 @@ module.exports = function (cacheDir, fetch_value) {
     let print = require('../dev-printer')()
 
     // Init file cache
-    print('disik cache dir:' + cacheDir)
+    print('disk cache dir:' + cacheDir)
     if (!fs.existsSync(cacheDir)) {
         fs.mkdirSync(cacheDir);
     }
