@@ -6,7 +6,6 @@ let addPath = 'https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad
 let demo_f = path => {
     let startTime = Date.now()
     return ff(path).then((f) => {
-        console.log("f is a -> " + f)
         console.log('f(3,8) = ' + f(3, 8));
         let endTime = Date.now()
         console.log(`demo took ${(endTime - startTime) / 1000} seconds.`)
