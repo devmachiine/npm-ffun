@@ -1,18 +1,15 @@
-module.exports = function (httpsUrl) {
+module.exports = function (https_url) {
 
     const https = require('https');
 
     return new Promise((resolve, reject) => {
 
-        https.get(httpsUrl, (resp) => {
+        https.get(https_url, (resp) => {
             let data = '';
             resp.on('data', (chunk) => {
                 data += chunk;
             });
             resp.on('end', () => resolve(data));
-        }).on("error", (err) => {
-            console.log("Error: " + err.message);
-            reject(err);
-        })
+        }).on("error", (err) => reject(err))
     });
 }

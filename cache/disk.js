@@ -1,11 +1,11 @@
-module.exports = function (cacheDir, fetch_value) {
+module.exports = function (cache_dir, fetch_value) {
 
     const fs = require('fs')
 
     // Init file cache
 
-    if (!fs.existsSync(cacheDir)) {
-        fs.mkdirSync(cacheDir);
+    if (!fs.existsSync(cache_dir)) {
+        fs.mkdirSync(cache_dir);
     }
 
     let disk_fetch = (file) => new Promise((resolve, _reject) => {
@@ -19,14 +19,14 @@ module.exports = function (cacheDir, fetch_value) {
         });
     })
 
-    let toFileName = (data) => data.replace(/\//g, '-').replace(/\:/g, '_')
+    let valid_filename = (data) => data.replace(/\//g, '-').replace(/\:/g, '_')
 
-    let convertToFilename = (key) => `${cacheDir}/${toFileName(key)}.txt`
+    let file_path = (key) => `${cache_dir}/${valid_filename(key)}.txt`
     // todo folder(s) for files and .external for remote dependency
 
     let lookup = dependency => {
 
-        let filename = convertToFilename(dependency)
+        let filename = file_path(dependency)
 
         return disk_fetch(filename).then((disk_val) => {
             if (disk_val) {
