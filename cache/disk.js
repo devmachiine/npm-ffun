@@ -2,6 +2,8 @@ module.exports = function (cache_dir, fetch_value) {
 
     const fs = require('fs')
 
+    const print = require('../dev-printer')(printerOn = false)
+
     // Init file cache
 
     if (!fs.existsSync(cache_dir)) {
@@ -21,17 +23,33 @@ module.exports = function (cache_dir, fetch_value) {
 
     let valid_filename = (data) => data.replace(/\//g, '-').replace(/\:/g, '_')
 
-    let file_path = (key) => `${cache_dir}/${valid_filename(key)}.txt`
+    let file_path = (key) => {
+        if (!key.startsWith(`https`)) {
+            console.log(`local function, already 'cached' to disk`)
+            // devnote ~ check that path is in project root, and/or added to git.
+            // -> for unknown consumers of this repo
+            // -> for other forks/download of this repo to work correctly 
+            return key
+        }
+        else return `${cache_dir}/${valid_filename(key)}.txt`
+    }
     // todo folder(s) for files and .external for remote dependency
 
     let lookup = dependency => {
 
+
         let filename = file_path(dependency)
+        print('disk lookup: ' + dependency)
+        print('disk file request: ' + filename)
 
         return disk_fetch(filename).then((disk_val) => {
             if (disk_val) {
+                print('disk retrieved: ' + disk_val)
+
                 return Promise.resolve(disk_val)
             } else {
+                print('disk cache miss')
+
                 return fetch_value(dependency).then((val) => disk_add(filename, val))
             }
 

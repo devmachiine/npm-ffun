@@ -1,7 +1,8 @@
 var cache = require('./cache-barrel')('./shelf')
 var ff = require('./draw.js')(cache)
 
-let addPath = 'https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/2f980ee176dfa76d03dda4bf1737c3fe6a727eae/add.js'
+let remote_add = 'https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/2f980ee176dfa76d03dda4bf1737c3fe6a727eae/add.js'
+let local_multiply = './tests/functions/multiply.js'
 
 let demo_f = path => {
     let startTime = Date.now()
@@ -14,9 +15,12 @@ let demo_f = path => {
 
 let program_end = false // prevent node.js exit while async code runs
 
-demo_f(addPath).then(() => demo_f(addPath))
-    .catch((oops) => console.log('oops ~ ' + oops))
-    .then(() => {
+demo_f(remote_add).
+    then(() => demo_f(remote_add)).
+    then(() => demo_f(local_multiply)).
+    then(() => demo_f(local_multiply)).
+    catch((oops) => console.log('oops ~ ' + oops)).
+    then(() => {
         program_end = true
     });
 
