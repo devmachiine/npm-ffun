@@ -34,6 +34,12 @@ x._._ show honensty in that changes will possibly break your code, 'sorry'.
 
 ## Detail
 
-Module `draw` takes single function, that returns source code for a given path or url
+### draw
 
-Module `cache` searches an in-memory cache for a function, otherwise it checks the disk to find the code, and otherwise fetches the data from the web. The disk and memory caches are subsequently updated to cache values as they are retrieved from lower levels.
+Takes single function, that returns source code for a given path or url, and returns a Promise(function)
+
+### cache-barrel
+
+A function that searches an in-memory cache for a function, otherwise it checks the disk _(eg `./shelf`)_ to find the code, and otherwise fetches the data from the web. The disk and memory caches are subsequently updated to cache values as they are retrieved from lower levels.
+
+Each function saved on disk is saved in it's own file, similar to the remote dependency drawn from the web. If multiple remote functions were saved in the same file(s) instead, they would cause many changes in those files over the life of a project (git history), and make remote dependency resolution for those functions substantially more difficult to track and manage effectively.
