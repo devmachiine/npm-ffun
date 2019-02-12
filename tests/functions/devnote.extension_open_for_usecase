@@ -1,0 +1,1 @@
+() => `In cache directory .internal or .external could indicate source of dependencies. In local functions, extensions could be flags to build tool(s)`
