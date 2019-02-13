@@ -53,7 +53,7 @@ module.exports = function (cache_dir, fetch_value) {
                 return fetch_value(dependency).then((val) => disk_add(filename, val))
             }
 
-        }).catch(err => 'disk cache error -> ' + err)
+        }).catch(err => 'disk cache error -> ' + err) // Todo don't return text message as code result
     }
 
     return lookup
