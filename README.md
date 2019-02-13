@@ -1,6 +1,8 @@
-# npm-draw-poc
+# npm-ffetch-poc
 
-POC for function-level dependencies.
+Proof of concept for function-level dependencies.
+
+That is, instead of a dependency on a package/library/jar/etc.. , you only have dependencies on the functions aka methods that you need.
 
 ## Usage:
 
