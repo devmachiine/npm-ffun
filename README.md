@@ -27,10 +27,23 @@ outputs: `result = 11`
 
 ## Background
 
-Semantic versioning states that:
-_._.x will probably not be a breaking change
-_.x._ also won't be a breaking change, pinky promise ;)
-x._._ show honensty in that changes will possibly break your code, 'sorry'.
+Yet another [great talk by Rich Hickey](https://www.youtube.com/watch?v=oyLBGkS5ICk) gives a good overview of the problem that we have: We don't want to upgrade dependencies because they usually entail breaking changes. Often, especially for small pieces of code, developers prefer to copy or re-invent the wheel to avoid the dependency problem all togehter.
+
+How much MB does a typical angular project have ~ do you _really_ need to download all the code, even if you only run a subset ?
+
+Another point, there is no benefit in re-testing and re-building the same things over and over if it's execution path hasn't changed. It slows down the dev/test feedback loop.
+
+There is a versioning convention called 'Semantic versioning':
+<br/> \_.\_.x will probably not be a breaking change
+<br/> \_.x.\_ also won't be a breaking change, pinky promise ;)
+<br/> x.\_.\_ is more honenst : changes will possibly break your code, oops!
+
+This is not a solution, as it only reflects the interface of a library. The behaviour changes from version to version, and sometimes even a 0.0.x bump is a breaking change anyway.
+
+What we want is a way to re-use code in a way we can rely on, without pushing breaking changes to consumers of shared code, while still having a way to signal updates (ex. security and performance improvements) people can opt into.
+
+This is a work in progress to demonstrate the concept.
+
 
 ## Detail
 
