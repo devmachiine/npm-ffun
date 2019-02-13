@@ -2,12 +2,12 @@ var cache = require('./cache-barrel')('./shelf')
 var ff = require('./draw.js')(cache)
 
 let remote_add = 'https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/2f980ee176dfa76d03dda4bf1737c3fe6a727eae/add.js'
-let local_multiply = './tests/functions/multiply.js'
+let local_multiply = './functions/multiply.js'
 
 let demo_f = path => {
     let startTime = Date.now()
     return ff(path).then((f) => {
-        console.log('f(3,8) = ' + f(3, 8));
+        console.log('f(5 ,10) = ' + f(5, 10));
         let endTime = Date.now()
         console.log(`demo took ${(endTime - startTime) / 1000} seconds.`)
     })
