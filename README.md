@@ -34,9 +34,9 @@ Outputs:
 
 ## A more complex use case
 
-The remote function could be more interesting. Fetched functions can also use `ffetch` themselves to retrieve other functions, and so forth, building an entire dependency tree they require to do any complex task. An entire program can be built from only functions.
+The remote function could be more interesting. Fetched functions can also use `ffetch` themselves to retrieve other functions, and so forth, building an entire dependency tree they require to do complex tasks. An entire program can be built from only functions.
 
-This takes a bit of practice in functional programming to think of constructing your programs in this way, but you will find it very rewarding to learn, regardless whether this project is a success or not.
+It takes a bit of practice in functional programming to think of constructing your programs in this way, but you will find it very rewarding to give it a try ~ regardless whether this project is a success or not.
 
 ## Background
 
@@ -46,12 +46,12 @@ How many megabytes of dependencies does a project have ~ do you really need to d
 
 Also, there is no benefit in re-testing and re-building the same things over and over if it's execution path hasn't changed. It slows down the dev/test feedback loop.
 
-[Semantic versioning](https://semver.org/spec/v1.0.0-beta.html) attempts to make things easier with a convention:
+[Semantic versioning](https://semver.org/spec/v1.0.0-beta.html) makes dependency management a little easier with a convention:
 <br/> \_.\_.x will probably not be a breaking change
 <br/> \_.x.\_ also won't be a breaking change, pinky promise ;)
 <br/> x.\_.\_ is more honenst : changes will possibly break your code, oops!
 
-That's is no final solution to dependency management, as it only reflects the interactions with a package/library. The behaviour changes from version to version, and sometimes even a 0.0.x bump is a breaking change anyway.
+However the version number only reflects the interactions with a package/library. Sometimes. The behaviour changes from version to version, and a 0.0.x bump could still be a breaking change anyway.
 
 What we want is to re-use shared code, without pushing breaking changes to unknown consumers, and signal updates that people can opt into. *(ex. security and performance improvements)*
 
