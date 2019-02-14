@@ -15,17 +15,27 @@ You find the code you need in `https://example.com/url/math/addition-1992.js`
 (x, y) => x + y
 ```
 
-In your nodejs app, specifying `./shelf` as the directory to download code to
+Your nodejs app could import _(aka use, open,..)_ just the code it needs:
 
 ```javascript
+// require ffetch and download to code to ./shelf directory
 const ff = require('./ffetch.js')('./shelf') 
 
-let path = 'https://example.com/url/math/addition.js'
+// url (or local file path) to our dependency
+let path = `https://example.com/url/math/addition-1992.js`
 
-ff(path).then((f) => console.log('result = ' + f(10, 5)))
+// fetch the function and run it locally
+ff(path).then((f) => console.log('10 + 5 = ' + f(10, 5)))
 ```
 
-outputs: `result = 15`
+outputs: 
+> `result = 15`
+
+## A more complex use case
+
+The remote function could be a more interesting function. Ffetch'ed functions can also use ffetch themselves to retrieve other functions, and so forth, building an entire dependency tree they require to do any complex task, an entire program can be built from only functions.
+
+This takes a bit of practice in functional programming to think of constructing your programs in this way, but you will find it very rewarding to learn, regardless whether this project is a success or not.
 
 ## Background
 
@@ -43,6 +53,12 @@ There is a versioning convention called 'Semantic versioning':
 This is not a solution, as it only reflects the interface of a library. The behaviour changes from version to version, and sometimes even a 0.0.x bump is a breaking change anyway.
 
 What we want is a way to re-use code in a way we can rely on, without pushing breaking changes to consumers of shared code, while still having a way to signal updates (ex. security and performance improvements) people can opt into.
+
+## Futher work
+
+Function-level dependency resolution, especially dynamically, provides it's own set of challenges and concerns to use over a traditional package manager like we are used to.
+
+I suspect the dynamic resolution will have to be optional, to rather have a build tool so the developer can choose when to upgrade packages convently.
 
 <!--
 ## Detail
