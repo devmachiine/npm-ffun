@@ -24,7 +24,7 @@ module.exports = function (cache_dir, fetch_value) {
     let valid_filename = (data) => data.replace(/\//g, '-').replace(/\:/g, '_')
 
     let file_path = (key) => {
-        if (!key.startsWith(`https`)) {
+        if (!key.startsWith(`https://`)) {
             console.log(`local function, already 'cached' to disk`)
             // devnote ~ check that path is in project root, and/or added to git.
             // -> for unknown consumers of this repo
