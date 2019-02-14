@@ -2,7 +2,7 @@
 
 Proof of concept for function-level dependencies.
 
-In other words, instead of adding a whole package aka library to your project as a dependency, you only add the functions aka methods that you need. You can think of each function as a 'mini-package'.
+In other words, instead of adding a whole package _(aka library)_ to your project as a dependency, you only add the functions _(aka methods)_ that you need. You can think of each function as a 'mini-package'.
 
 ## Example:
 
