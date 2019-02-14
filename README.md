@@ -2,7 +2,7 @@
 
 Proof of concept for function-level dependencies.
 
-In other words, instead of adding a whole package _(aka library)_ to your project as a dependency, you only add the functions _(aka methods)_ that you need. You can think of each function as a 'mini-package'.
+In other words, instead of adding a whole package _(aka library)_ to your project as a dependency, you only add the functions _(aka methods)_ that you need. You can think of each function as a 'mini-package', and `ffetch.js` as an alternative supplement to npm.
 
 ## Example:
 
@@ -18,7 +18,8 @@ You find the code you need in `https://example.com/url/math/addition-1992.js`
 Your nodejs app could import just the code it needs:
 
 ```javascript
-// require ffetch and download to code to ./shelf directory
+// require ffetch and point it to a directory
+// so that code is only ever downloaded once from the web
 const ff = require('./ffetch.js')('./shelf') 
 
 // url (or local file path) to our dependency
@@ -39,9 +40,9 @@ This takes a bit of practice in functional programming to think of constructing 
 
 ## Background
 
-Yet another [great talk by Rich Hickey](https://www.youtube.com/watch?v=oyLBGkS5ICk) gives a good overview of the problem that we have: **We are hesitant to upgrade dependencies because they usually entail breaking changes.** Often, especially for small pieces of code, developers prefer to copy or re-invent the wheel to avoid the dependency problem all togehter.
+Another [great talk by Rich Hickey](https://www.youtube.com/watch?v=oyLBGkS5ICk) gives a good overview of the problem that we have: **We are hesitant to upgrade dependencies because they usually entail breaking changes.** Often, especially for small pieces of code, developers prefer to copy or re-invent the wheel to avoid the dependency problem all togehter.
 
-How many megabytes of dependencies does a project have, ~ do you really need to download *all* the code, even if you only run a subset ?
+How many megabytes of dependencies does a project have ~ do you really need to download *all* the code, even if you only run a subset ?
 
 Also, there is no benefit in re-testing and re-building the same things over and over if it's execution path hasn't changed. It slows down the dev/test feedback loop.
 
@@ -50,7 +51,7 @@ Also, there is no benefit in re-testing and re-building the same things over and
 <br/> \_.x.\_ also won't be a breaking change, pinky promise ;)
 <br/> x.\_.\_ is more honenst : changes will possibly break your code, oops!
 
-This is not a solution, as it only reflects the interactions with a package/library. The behaviour changes from version to version, and sometimes even a 0.0.x bump is a breaking change anyway.
+That's is no final solution to dependency management, as it only reflects the interactions with a package/library. The behaviour changes from version to version, and sometimes even a 0.0.x bump is a breaking change anyway.
 
 What we want is to re-use shared code, without pushing breaking changes to unknown consumers, and signal updates that people can opt into. *(ex. security and performance improvements)*
 
@@ -60,7 +61,10 @@ Function-level dependency resolution, especially dynamically, provides it's own 
 
 I suspect dynamic resolution will have to be optional *(mainly for security & reliability reasons)*, and to rather/also create a build tool.
 
-Just any central repository (Github <3, brew.sh, etc..) can dissipate, that problem is exemplified by having thousands of url based dependencies. Instead of creating yet another package manager central, it would be better to have a p2p-mesh network for sharing code. (ex. function identifier could be a hash of the function, signed by the publisher on a shared ledger)
+Just as any central repository (Github <3, brew.sh, etc..) can evaporate, that problem is exemplified by having thousands of url based dependencies. Instead of creating yet another package manager central, it would be better to have a p2p-mesh network for sharing code. Thoughts arount *that* project:
+- Function identifiers could be a hash of the function, signed by the publisher on a shared ledger.
+- A naming convention to enable the mesh to additionaly share optimized javascript, python, and eventually compiled language components.
+- Who knows, maybe pure functions could be [memoized](https://en.wikipedia.org/wiki/Memoization) globally..
 
 <!--
 ## Detail
