@@ -1,4 +1,4 @@
-var ff = require('./draw.js')('./shelf')
+var ff = require('./ffetch.js')('./shelf')
 
 let remote_add = 'https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/2f980ee176dfa76d03dda4bf1737c3fe6a727eae/add.js'
 let local_multiply = './functions/multiply.js'

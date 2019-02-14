@@ -18,7 +18,7 @@ You find the code you need in `https://example.com/url/math/addition-1992.js`
 In your nodejs app, specifying `./shelf` as the directory to download code to
 
 ```javascript
-const ff = require('./draw.js')('./shelf') 
+const ff = require('./ffetch.js')('./shelf') 
 
 let path = 'https://example.com/url/math/addition.js'
 
@@ -44,17 +44,18 @@ This is not a solution, as it only reflects the interface of a library. The beha
 
 What we want is a way to re-use code in a way we can rely on, without pushing breaking changes to consumers of shared code, while still having a way to signal updates (ex. security and performance improvements) people can opt into.
 
-This is a work in progress to demonstrate the concept.
-
-
+<!--
 ## Detail
 
-### draw
+### ffetch
 
 Takes single function, that returns source code for a given path or url, and returns a Promise(function)
 
-### cache-barrel
+### ffetch(argument) ~ Directory name, or cache-barrel function
+
+If the first argument isn't a directory name, it expects a dependency-resolver-function:
 
 A function that searches an in-memory cache for a function, otherwise it checks the disk _(eg `./shelf`)_ to find the code, and otherwise fetches the data from the web. The disk and memory caches are subsequently updated to cache values as they are retrieved from lower levels.
 
 Each function saved on disk is saved in it's own file, similar to the remote dependency drawn from the web. If multiple remote functions were saved in the same file(s) instead, they would cause many changes in those files over the life of a project (git history), and make remote dependency resolution for those functions substantially more difficult to track and manage effectively.
+--> 

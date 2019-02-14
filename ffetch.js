@@ -20,7 +20,7 @@ module.exports = function (fetch_code = undefined) {
         return fetch_code(resourcePath)
             .then((code) => build(code, fetch_and_build))
             .catch((oops) => {
-                print('draw oops:' + oops);
+                print('ffetch oops:' + oops);
             });
 
     }
