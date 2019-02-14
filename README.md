@@ -15,7 +15,7 @@ You find the code you need in `https://example.com/url/math/addition-1992.js`
 (x, y) => x + y
 ```
 
-Your nodejs app could import _(aka use, open,..)_ just the code it needs:
+Your nodejs app could import just the code it needs:
 
 ```javascript
 // require ffetch and download to code to ./shelf directory
