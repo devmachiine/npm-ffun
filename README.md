@@ -2,30 +2,30 @@
 
 Proof of concept for function-level dependencies.
 
-That is, instead of a dependency on a package/library/jar/etc.. , you only have dependencies on the functions aka methods that you need.
+In other words, instead of adding a whole package aka library to your project as a dependency, you only add the functions aka methods that you need. You can think of each function as a 'mini-package'.
 
-## Usage:
+## Example:
 
-Say that `https://example.com/some/url/lambda_function.js` has code:
+Say that you need a math function to add two numbers together, but you are not interested in the PI constant and the 100 other things a math package might provide.
+
+You find the code you need in `https://example.com/url/math/addition-1992.js`
 
 ```javascript
 // a single arrow function
 (x, y) => x + y
 ```
 
-then, using folder `shelf` relative to execution of nodejs program:
+In your nodejs app, specifying `./shelf` as the directory to download code to
 
 ```javascript
-const cache = require('./cache-barrel')('./shelf') 
-const ff = require('./draw.js')(cache) 
+const ff = require('./draw.js')('./shelf') 
 
-let path = 'https://example.com/some/url/lambda_function.js'
+let path = 'https://example.com/url/math/addition.js'
 
-ff(path).then((f) => console.log('result = ' + f(3, 8)))
-
+ff(path).then((f) => console.log('result = ' + f(10, 5)))
 ```
 
-outputs: `result = 11`
+outputs: `result = 15`
 
 ## Background
 

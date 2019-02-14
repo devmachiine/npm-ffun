@@ -1,5 +1,12 @@
-module.exports = function (fetch_code) {
-    let print = require('./dev-printer')()
+module.exports = function (fetch_code = undefined) {
+    let print = require('./dev-printer')(printerOn = true)
+
+    if (typeof fetch_code === "string") {
+        fetch_code = require('./cache-barrel')(fetch_code)
+    }
+    else if (typeof fetch_code !== "function") {
+        throw ('require(ff)(directory-string || dependency-resolver-function')
+    }
 
     let build = (code, context) => {
         print('build - code: ' + code)
