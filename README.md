@@ -39,28 +39,28 @@ This takes a bit of practice in functional programming to think of constructing 
 
 ## Background
 
-Yet another [great talk by Rich Hickey](https://www.youtube.com/watch?v=oyLBGkS5ICk) gives a good overview of the problem that we have: **We don't want to upgrade dependencies because they usually entail breaking changes.** Often, especially for small pieces of code, developers prefer to copy or re-invent the wheel to avoid the dependency problem all togehter.
+Yet another [great talk by Rich Hickey](https://www.youtube.com/watch?v=oyLBGkS5ICk) gives a good overview of the problem that we have: **We are hesitant to upgrade dependencies because they usually entail breaking changes.** Often, especially for small pieces of code, developers prefer to copy or re-invent the wheel to avoid the dependency problem all togehter.
 
-How much MB does a typical angular project have ~ do you _really_ need to download all the code, even if you only run a subset ?
+How many megabytes of dependencies does a project have, ~ do you really need to download *all* the code, even if you only run a subset ?
 
-Another point, there is no benefit in re-testing and re-building the same things over and over if it's execution path hasn't changed. It slows down the dev/test feedback loop.
+Also, there is no benefit in re-testing and re-building the same things over and over if it's execution path hasn't changed. It slows down the dev/test feedback loop.
 
 [Semantic versioning](https://semver.org/spec/v1.0.0-beta.html) attempts to make things easier with a convention:
 <br/> \_.\_.x will probably not be a breaking change
 <br/> \_.x.\_ also won't be a breaking change, pinky promise ;)
 <br/> x.\_.\_ is more honenst : changes will possibly break your code, oops!
 
-This is not a solution, as it only reflects the interactions with a library. The behaviour changes from version to version, and sometimes even a 0.0.x bump is a breaking change anyway.
+This is not a solution, as it only reflects the interactions with a package/library. The behaviour changes from version to version, and sometimes even a 0.0.x bump is a breaking change anyway.
 
-What we want is to re-use shared code, without pushing breaking changes to unknown consumers, and signal updates people can opt into. *(ex. security and performance improvements)*
+What we want is to re-use shared code, without pushing breaking changes to unknown consumers, and signal updates that people can opt into. *(ex. security and performance improvements)*
 
 ## Futher work
 
-Function-level dependency resolution, especially dynamically, provides it's own set of challenges and concerns to use over a traditional package manager like we are used to.
+Function-level dependency resolution, especially dynamically, provides it's own set of challenges and concerns to use over a traditional package manager (ex. npm, yarn).
 
-I suspect the dynamic resolution will have to be optional *(mainly for security & reliability reasons)*, and to rather/also use a build tool so that people can choose when to upgrade dependencies.
+I suspect dynamic resolution will have to be optional *(mainly for security & reliability reasons)*, and to rather/also create a build tool.
 
-Just any central repository (Github <3, npm, yarn, maven, brew.sh, etc..) can dissipate, that problem is exemplified by having thousands of url based dependencies. Instead of creating yet another package manager central, it would be better to have a p2p-mesh network for sharing code. (ex. function identifier could be a hash of the function signed by the publisher on a shared ledger)
+Just any central repository (Github <3, brew.sh, etc..) can dissipate, that problem is exemplified by having thousands of url based dependencies. Instead of creating yet another package manager central, it would be better to have a p2p-mesh network for sharing code. (ex. function identifier could be a hash of the function, signed by the publisher on a shared ledger)
 
 <!--
 ## Detail
