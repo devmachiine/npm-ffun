@@ -26,11 +26,11 @@ const ff = require('./ffetch.js')('./shelf')
 let path = 'https://example.com/url/math/addition-1992.js'
 
 // fetch the function and run it locally
-ff(path).then((add) => console.log(`10 plus 5 equals ${add(10, 5)}`))
+ff(path).then((add) => console.log(`2 plus 5 equals ${add(2, 5)}`))
 ```
 
-outputs: 
-> `10 plus 5 equals 15`
+Outputs: 
+> `2 plus 5 equals 7`
 
 ## A more complex use case
 
