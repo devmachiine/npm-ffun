@@ -22,7 +22,7 @@ Your nodejs app could import just the code it needs:
 const ff = require('./ffetch.js')('./shelf') 
 
 // url (or local file path) to our dependency
-let path = `https://example.com/url/math/addition-1992.js`
+let path = 'https://example.com/url/math/addition-1992.js'
 
 // fetch the function and run it locally
 ff(path).then((f) => console.log('10 + 5 = ' + f(10, 5)))
