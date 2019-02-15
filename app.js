@@ -3,12 +3,18 @@ var ff = require('./ffetch.js')('./shelf')
 let remote_add = 'https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/2f980ee176dfa76d03dda4bf1737c3fe6a727eae/add.js'
 let local_multiply = './functions/multiply.js'
 
+let ff_demo = require('./ffetch_2019-02-15')('./shelf')
+
 let demo_f = path => {
     let startTime = Date.now()
-    return ff(path).then((f) => {
-        console.log('f(5 ,10) = ' + f(5, 10));
+    // return ff(path).then((f) => {
+    return ff_demo(path).then((f) => {
+        // f(5, 10).then(result =>{
+        console.log('f(5 ,10) = ' + f(5, 10))
+        // console.log('f(5 ,10) = ' + result)
         let endTime = Date.now()
         console.log(`demo took ${(endTime - startTime) / 1000} seconds.`)
+        // })
     })
 }
 
@@ -21,15 +27,15 @@ let demo1 = demo_f(remote_add).
     catch((oops) => console.log('oops ~ ' + oops)).
     then(() => console.log('--------------- end demo 1 ---------------'))
 
-// async/await not 'baked-in', and async with non async depenencies could break. 
-// TODO NB, bake-in await/async so that ff functions can call ff,
+// DONE! Bake-in await/async so that ff functions can call ff,
 // and that await is avaliable in ff functions, even if they don't use ff.
 
 let local_depend_local = './functions/local-depend-local.js'
 
-let demo_f2 = path => {
+let demo_f2 = pathf2 => {
     let startTime = Date.now()
-    return ff(path).then(async (f) => {
+    let asyncFunc = ff(pathf2)
+    return asyncFunc.then(async (f) => {
         console.log('f is a :' + f)
         let f5 = await f(5)
         console.log('f(5) = ' + f5)
@@ -40,7 +46,7 @@ let demo_f2 = path => {
 
 demo1.then(() => {
     demo_f2(local_depend_local).
-        then(() => demo_f2(local_depend_local)).
+        // then(() => demo_f2(local_depend_local)).
         catch((oops) => console.log('oops2 ~ ' + oops)).
         then(() => { program_end = true })
 });
