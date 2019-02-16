@@ -2,7 +2,7 @@ module.exports = function (cache_dir, fetch_value) {
 
     const fs = require('fs')
 
-    const print = require('../dev-printer')(printerOn = false)
+    const print = require('../dev-printer')(printerOn = true)
 
     // Init file cache
 
@@ -25,7 +25,7 @@ module.exports = function (cache_dir, fetch_value) {
 
     let file_path = (key) => {
         if (!key.startsWith(`https://`)) {
-            console.log(`local function, already 'cached' to disk`)
+            console.log(`local function, loading from disk`)
             // devnote ~ check that path is in project root, and/or added to git.
             // -> for unknown consumers of this repo
             // -> for other forks/download of this repo to work correctly 
@@ -37,14 +37,13 @@ module.exports = function (cache_dir, fetch_value) {
 
     let lookup = dependency => {
 
-
         let filename = file_path(dependency)
         print('disk lookup: ' + dependency)
         print('disk file request: ' + filename)
 
         return disk_fetch(filename).then((disk_val) => {
             if (disk_val) {
-                print('disk retrieved: ' + disk_val)
+                // print('disk retrieved: ' + disk_val)
 
                 return Promise.resolve(disk_val)
             } else {

@@ -1,20 +1,25 @@
-var ff = require('./ffetch.js')('./shelf')
+let full_path = (file) =>
+    file.includes(__dirname) ? file
+        : require('path').join(__dirname, file)
+
+let cache_dir = full_path('./shelf')
+
+var ff = require('./ffetch.js')(cache_dir)
 
 let remote_add = 'https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/2f980ee176dfa76d03dda4bf1737c3fe6a727eae/add.js'
-let local_multiply = './functions/multiply.js'
 
-let ff_demo = require('./ffetch_2019-02-15')('./shelf')
+let local_multiply = full_path('./functions/multiply.js')
+
+//throw 'run for the hills!'
+
+let ff_demo = require('./ffetch_2019-02-15')(cache_dir)
 
 let demo_f = path => {
     let startTime = Date.now()
-    // return ff(path).then((f) => {
     return ff_demo(path).then((f) => {
-        // f(5, 10).then(result =>{
         console.log('f(5 ,10) = ' + f(5, 10))
-        // console.log('f(5 ,10) = ' + result)
         let endTime = Date.now()
         console.log(`demo took ${(endTime - startTime) / 1000} seconds.`)
-        // })
     })
 }
 
@@ -30,13 +35,13 @@ let demo1 = demo_f(remote_add).
 // DONE! Bake-in await/async so that ff functions can call ff,
 // and that await is avaliable in ff functions, even if they don't use ff.
 
-let local_depend_local = './functions/local-depend-local.js'
+let local_depend_local = full_path('./functions/local-depend-local.js')
 
 let demo_f2 = pathf2 => {
     let startTime = Date.now()
     let asyncFunc = ff(pathf2)
     return asyncFunc.then(async (f) => {
-        console.log('f is a :' + f)
+        console.log('f is a :' + typeof f)
         let f5 = await f(5)
         console.log('f(5) = ' + f5)
         let endTime = Date.now()
