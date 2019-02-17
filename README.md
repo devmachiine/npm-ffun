@@ -40,7 +40,7 @@ It takes a bit of practice in functional programming to think of constructing yo
 
 ## Background
 
-Another [great talk by Rich Hickey](https://www.youtube.com/watch?v=oyLBGkS5ICk) gives a good overview of the problem that we have: **We are hesitant to upgrade dependencies because they usually entail breaking changes.** Often, especially for small pieces of code, developers prefer to copy or re-invent the wheel to avoid the dependency problem all togehter.
+Dependencies often entail breaking changes. Often, especially for small pieces of code, developers prefer to copy or re-invent the wheel to avoid this [dependency problem](https://www.youtube.com/watch?v=oyLBGkS5ICk) all togehter.
 
 How many megabytes of dependencies does a project have ~ do you really need to download *all* the code, even if you only run a subset ?
 
