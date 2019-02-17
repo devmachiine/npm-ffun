@@ -49,6 +49,9 @@ module.exports = function (cache_dir, fetch_value) {
             } else {
                 print('disk cache miss')
 
+                if (!filename.startsWith('https://'))
+                    throw `Could not find file: ${filename}`
+
                 return fetch_value(dependency).then((val) => disk_add(filename, val))
             }
 
