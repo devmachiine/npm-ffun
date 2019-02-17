@@ -49,7 +49,11 @@ let ok_messages = test(`test functions show expected messages`, () => {
 // restore printer
 print = require('./dev-printer')()
 test(`test functions tests yield expected results`, () => {
-    assert(`${ok_test} && ${ok_messages}`)
-    assert(`!(${err_eval} || ${err_throw} || ${err_eval_err})`)
+    assert(`!${err_eval} && 'err_eval'`)
+    assert(`!${err_throw} && 'err_throw'`)
+    assert(`!${err_eval_err} && 'err_eval_err'`)
+
+    assert(`${ok_test} && 'ok_test'`)
+    assert(`${ok_messages} && 'ok_messagges'`)
 })
 
