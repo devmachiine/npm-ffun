@@ -1,5 +1,3 @@
-let print = require('./dev-printer')()
-
 const assert = (assumption) => {
     if (!eval(assumption))
         throw `Evaluation [${assumption}]`
@@ -8,17 +6,17 @@ const assert = (assumption) => {
 const test = (description, func) => {
     try {
         func()
-        print('[ok] ' + description)
-        return true
+        return { description: description }
     } catch (err) {
-        print(`[error] ${description} \n --> ${err}`)
-        return false
+        return { description: description, error: err }
     }
 }
 
-// replace printer to capture output messages
-print = (msg) => test_messages += '\n' + msg
-let test_messages = "-".repeat(60)
+const display_message = test => {
+    let prefix = test.error ? 'error' : 'ok'
+    let postfix = test.error ? ' --> ' + test.error : ''
+    return `[${prefix}] ${test.description}${postfix}`
+}
 
 let ok_test = test(`show [ok] on ok`, () => {
     let two = 2
@@ -27,33 +25,26 @@ let ok_test = test(`show [ok] on ok`, () => {
 let err_eval = test(`show evaluation on error`, () => {
     assert(`1 > 2`)
 })
-let err_throw = test(`show thrown error`, () => {
-    throw 'ThrownError'
-})
 let err_eval_err = test(`show evaluation exception`, () => {
     assert(undefined_variable)
 })
-
-let ok_messages = test(`test functions show expected messages`, () => {
-    let assert_message = (output) => assert(`${test_messages.includes(output)} && \`${output}\``)
-
-    assert_message('[ok] show [ok] on ok')
-    assert_message('[error] show evaluation on error')
-    assert_message(' --> Evaluation [1 > 2]')
-    assert_message('[error] show thrown error')
-    assert_message(' --> ThrownError')
-    assert_message('[error] show evaluation exception')
-    assert_message(' --> ReferenceError: undefined_variable is not defined')
+let err_throw = test(`show thrown error`, () => {
+    throw 'ThrownError'
+})
+let ok_test_tests = test(`test functions yield expected results with correct messages`, () => {
+    let test_test = (result, expected_assert, expected_message) => {
+        let passed = !result.error
+        let message = display_message(result)
+        assert(`${passed === expected_assert} && '${result.description}'`)
+        assert(`'${message}' === '${expected_message}'`)
+    }
+    test_test(ok_test, true, '[ok] show [ok] on ok')
+    test_test( err_eval, false, '[error] show evaluation on error --> Evaluation [1 > 2]')
+    test_test(err_eval_err, false, '[error] show evaluation exception --> ReferenceError: undefined_variable is not defined')
+    test_test(err_throw, false, '[error] show thrown error --> ThrownError')
 })
 
-// restore printer
-print = require('./dev-printer')()
-test(`test functions tests yield expected results`, () => {
-    assert(`!${err_eval} && 'err_eval'`)
-    assert(`!${err_throw} && 'err_throw'`)
-    assert(`!${err_eval_err} && 'err_eval_err'`)
-
-    assert(`${ok_test} && 'ok_test'`)
-    assert(`${ok_messages} && 'ok_messagges'`)
-})
-
+const print = require('./dev-printer')()
+let display = (test) => print(display_message(test))
+display(ok_test_tests)
+print('-'.repeat(99))
