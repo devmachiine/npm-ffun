@@ -16,8 +16,10 @@ const test = (description, func) => {
     }
 }
 
-let test_messages = "-".repeat(60)
+// replace printer to capture output messages
 print = (msg) => test_messages += '\n' + msg
+let test_messages = "-".repeat(60)
+
 let ok_test = test(`show [ok] on ok`, () => {
     let two = 2
     assert(`${two} == 2`)
@@ -31,9 +33,8 @@ let err_throw = test(`show thrown error`, () => {
 let err_eval_err = test(`show evaluation exception`, () => {
     assert(undefined_variable)
 })
-test_messages += '\n' + "-".repeat(60)
-print = require('./dev-printer')()
-test(`test functions show expected messages`, () => {
+
+let ok_messages = test(`test functions show expected messages`, () => {
     let assert_message = (output) => assert(`${test_messages.includes(output)} && \`${output}\``)
 
     assert_message('[ok] show [ok] on ok')
@@ -44,10 +45,11 @@ test(`test functions show expected messages`, () => {
     assert_message('[error] show evaluation exception')
     assert_message(' --> ReferenceError: undefined_variable is not defined')
 })
-test(`test functions tests yield expected booleans`, () => {
-    assert(`${true} === ${ok_test}`)
-    assert(`${false} === ${err_eval}`)
-    assert(`${false} === ${err_throw}`)
-    assert(`${false} === ${err_eval_err}`)
+
+// restore printer
+print = require('./dev-printer')()
+test(`test functions tests yield expected results`, () => {
+    assert(`${ok_test} && ${ok_messages}`)
+    assert(`!(${err_eval} || ${err_throw} || ${err_eval_err})`)
 })
 
