@@ -19,9 +19,10 @@ module.exports = function (fetch_code) {
             return context
         })()
 
-        let ffetch2 = path => (...params) => context(path, ...params)
+        // let ffetch2 = path => (...params) => context(path, ...params)
 
-        let fun = (new Function(`return ((ff,f2) => (async ${code}))`))()(fb, ffetch2);
+        // let fun = (new Function(`return ((ff,f2) => (async ${code}))`))()(fb, ffetch2);
+        let fun = (new Function(`return ((ff) => (async ${code}))`))()(fb);
 
         // print('funky funk built: ' + fun2)
 
@@ -81,36 +82,38 @@ module.exports = function (fetch_code) {
         }
     }
 
-    let fetch_and_build = async (resourcePath, ...funcArgs) => {
-        try {
-            if (typeof ff !== "undefined")
-                console.log('in fetch_and_build we know ff is: ' + ff)
+    let fetch_and_build = (resourcePath) => (...funcArgs) =>
+        (async () => {
+            try {
+                if (typeof ff !== "undefined")
+                    console.log('in fetch_and_build we know ff is: ' + ff)
 
-            if (typeof ffetch_path !== "undefined") {
-                console.log('in fetch_and_build we know ffetch_path is: ' + ffetch_path)
-            } else {
-                console.log('in fetch_and_build, no ffetch_path, too late to set initial root?')
+                if (typeof ffetch_path !== "undefined") {
+                    console.log('in fetch_and_build we know ffetch_path is: ' + ffetch_path)
+                } else {
+                    console.log('in fetch_and_build, no ffetch_path, too late to set initial root?')
+                }
+
+                let resource = await resolve_name(resourcePath)
+                let code = await fetch_code(resource)
+                let func = await build(code, fetch_and_build, resource)
+                // let func = await build(code, fetch_and_build)
+                return func(...funcArgs)
+
+                // print('fetch_and_build -- code--------------')
+                // print('' + code)
+                // print('func--------------')
+                // print('' + func)
+
+                // if (funcArgs && funcArgs.length) {
+                //     print('fetch_and_build args -> ' + funcArgs)
+                //     return await func(...funcArgs)
+                // }
+                // else return func
+            } catch (oops) {
+                print('ffetch oops:' + oops);
             }
-
-            let resource = await resolve_name(resourcePath)
-            let code = await fetch_code(resource)
-            let func = await build(code, fetch_and_build, resource)
-            // let func = await build(code, fetch_and_build)
-
-
-            // print('fetch_and_build -- code--------------')
-            // print('' + code)
-            // print('func--------------')
-            // print('' + func)
-            if (funcArgs && funcArgs.length) {
-                print('fetch_and_build args -> ' + funcArgs)
-                return await func(...funcArgs)
-            }
-            else return func
-        } catch (oops) {
-            print('ffetch oops:' + oops);
-        }
-    }
+        })()
 
     print('fetchandbuild--------')
     print(fetch_and_build)

@@ -39,10 +39,8 @@ let local_depend_local = full_path('./functions/local-depend-local.js')
 
 let demo_f2 = pathf2 => {
     let startTime = Date.now()
-    let asyncFunc = ff(pathf2)
-    return asyncFunc.then(async (f) => {
-        console.log('f is a :' + typeof f)
-        let f5 = await f(5)
+    let asyncFunc = ff(pathf2)(5)
+    return asyncFunc.then(f5 => {
         console.log('f(5) = ' + f5)
         let endTime = Date.now()
         console.log(`demo 2 took ${(endTime - startTime) / 1000} seconds.`)

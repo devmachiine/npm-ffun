@@ -4,15 +4,15 @@
 
     console.log('before external ff')
     console.log('ff is a : ' + typeof ff)
-    let multiply = await ff(path_multiply)
+    let multiply = ff(path_multiply)
     console.log('post external ff')
     console.log('multiply is a : ' + multiply)
 
-    let m2 = f2(path_multiply)
+    let m2 = ff(path_multiply)
     console.log('m2 is a: ' + m2)
-    console.log('m2(3,4) = ' + (await m2(3,4)))
+    console.log('m2(3,4) = ' + (await m2(3, 4)))
 
-    let m3 = f2(path_multiply)(5, 9)
+    let m3 = ff(path_multiply)(5, 9)
     console.log('m3 is a: ' + m3)
     console.log('m3(5,9) = ' + (await m3))
 
@@ -34,7 +34,7 @@
     let factorial5 = async n => {
         let product = n
         while (n-- > 1)
-            product = await ff(path_multiply, product, n)
+            product = await ff(path_multiply)(product, n)
         // product = await multiply(product, n)
         return product
     }
