@@ -6,7 +6,7 @@
                 "match": "\\.js$",
                 // "match": ".*",
                 //"isAsync": true,
-                "cmd": "node ${workspaceRoot}\\test.js"
+                "cmd": "node ${workspaceRoot}\\app-test.js"
             }/*,
             {
                 "match": "\\.txt$",

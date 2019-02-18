@@ -19,7 +19,9 @@ module.exports = function (fetch_code) {
             return context
         })()
 
-        let fun = (new Function(`return ((ff) => (async ${code}))`))()(fb);
+        let ffetch2 = path => (...params) => context(path, ...params)
+
+        let fun = (new Function(`return ((ff,f2) => (async ${code}))`))()(fb, ffetch2);
 
         // print('funky funk built: ' + fun2)
 

@@ -8,6 +8,14 @@
     console.log('post external ff')
     console.log('multiply is a : ' + multiply)
 
+    let m2 = f2(path_multiply)
+    console.log('m2 is a: ' + m2)
+    console.log('m2(3,4) = ' + (await m2(3,4)))
+
+    let m3 = f2(path_multiply)(5, 9)
+    console.log('m3 is a: ' + m3)
+    console.log('m3(5,9) = ' + (await m3))
+
     async function factorial(n) {
         if (n <= 1) { return 1 }
         else {
