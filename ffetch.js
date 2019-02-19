@@ -8,35 +8,6 @@ module.exports = function (fetch_code) {
         throw ('require(ff)(directory-string || dependency-resolver-function')
     }
 
-    let build = (code, context, ffetch_path) => {
-        // let build = (code, context) => {
-        print('build - code: ' + code.length + ' loc')
-        // print('build - context: ' + context)
-        // let fun = (new Function(`return ((ff) => (async ${code}))`))()(context);
-
-        let fb = (() => {
-            this.ffetch_path = ffetch_path
-            return context
-        })()
-
-        // let ffetch2 = path => (...params) => context(path, ...params)
-
-        // let fun = (new Function(`return ((ff,f2) => (async ${code}))`))()(fb, ffetch2);
-        let fun = (new Function(`return ((ff) => (async ${code}))`))()(fb);
-
-        // print('funky funk built: ' + fun2)
-
-        return fun
-    }
-
-    // let fetch_and_build = (resourcePath) => {
-    //     return fetch_code(resourcePath)
-    //         .then((code) => build(code, fetch_and_build))
-    //         .catch((oops) => {
-    //             print('ffetch oops:' + oops);
-    //         })
-    // }
-
     // todo: use ./ in http as domain root to resolve dependency path
     // example
     // https://raw.githubusercontent.com/username/project/branch/folder/folder2/some.js
@@ -60,10 +31,20 @@ module.exports = function (fetch_code) {
         let dep = dependency
         console.log('------> resolve -> dep: ' + dep)
 
+        // only resolve relative names given by ./ or ../../ etc..
+        if(!dep.startsWith('.')){
+            return dep
+        }
+
+        // full path isnt' relative. // devnote ~ this isnt needed because  of above rule.
+        if (dep.startsWith(`https://`)) {
+            return dep
+        }
+
+        // assumption, only local disk resolve // todo! web resolve.
+
         if (typeof ffetch_path !== "undefined") {
             console.log('resolve_name we know ffetch_path is: ' + ffetch_path)
-
-            // assumption, only local disk resolve // todo! web resolve.
 
             const path = require('path')
             let root_dir = path.dirname(ffetch_path)
@@ -82,6 +63,27 @@ module.exports = function (fetch_code) {
         }
     }
 
+    let build = (code, context, ffetch_path) => {
+        // let build = (code, context) => {
+        print('build - code: ' + code.length + ' loc')
+        // print('build - context: ' + context)
+        // let fun = (new Function(`return ((ff) => (async ${code}))`))()(context);
+
+        let fb = (() => {
+            this.ffetch_path = ffetch_path
+            return context
+        })()
+
+        // let ffetch2 = path => (...params) => context(path, ...params)
+
+        // let fun = (new Function(`return ((ff,f2) => (async ${code}))`))()(fb, ffetch2);
+        let fun = (new Function(`return ((ff) => (async ${code}))`))()(fb);
+
+        // print('funky funk built: ' + fun2)
+
+        return fun
+    }
+
     let fetch_and_build = (resourcePath) => (...funcArgs) =>
         (async () => {
             try {
@@ -97,19 +99,9 @@ module.exports = function (fetch_code) {
                 let resource = await resolve_name(resourcePath)
                 let code = await fetch_code(resource)
                 let func = await build(code, fetch_and_build, resource)
-                // let func = await build(code, fetch_and_build)
+
                 return func(...funcArgs)
 
-                // print('fetch_and_build -- code--------------')
-                // print('' + code)
-                // print('func--------------')
-                // print('' + func)
-
-                // if (funcArgs && funcArgs.length) {
-                //     print('fetch_and_build args -> ' + funcArgs)
-                //     return await func(...funcArgs)
-                // }
-                // else return func
             } catch (oops) {
                 print('ffetch oops:' + oops);
             }
