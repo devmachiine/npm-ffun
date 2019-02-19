@@ -63,7 +63,7 @@ I suspect dynamic resolution will have to be optional *(mainly for security & re
 
 Just as any central repository (Github <3, brew.sh, etc..) can evaporate, that problem is exemplified by having thousands of url based dependencies. Instead of creating yet another package manager central, it would be better to have a p2p-mesh network for sharing code. Thoughts arount *that* project:
 - Function identifiers could be a hash of the function, signed by the publisher on a shared ledger.
-- A naming convention to enable the mesh to additionaly share optimized javascript, python, and eventually compiled language components.
+- A mechanism to enable the mesh to additionaly share optimized javascript, python, and eventually compiled language components.
 - Who knows, maybe pure functions could be [memoized](https://en.wikipedia.org/wiki/Memoization) globally..
 
 <!--
