@@ -23,11 +23,8 @@
     }
 
     let multiply = ffp('./functions/multiply.js')
-
     let result = await multiply(3, 4)
-
-    console.log('5 * 34 = ' + result)
-
+    let basic_test = test("basic function ffetches and computes as expected", () => {assert(`${result} == 12`)})
 
     let test_test = await ffp('./tests/test-test.js')(test_framework)
     let test_injection = test("test framework can be injected into functions", () => {
@@ -44,10 +41,10 @@
             total++
         })
         // todo error/errors test/tests grammar.
-        console.log(`Ran ${total} tests${errors > 0 ? ` with ${errors} errors` : ' successfully.'}`)
+        console.log(`Ran ${total} tests${errors > 0 ? ` with ${errors} errors !!` : ' successfully.'}`)
     }
 
-    tally_display(test_injection)
+    tally_display(test_injection, basic_test)
 
     var end = new Date().getTime();
     var time = end - start_time;
