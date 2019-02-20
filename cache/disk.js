@@ -25,7 +25,7 @@ module.exports = function (cache_dir, fetch_value) {
 
     let file_path = (key) => {
         if (!key.startsWith(`https://`)) {
-            console.log(`local function, loading from disk`)
+            print(`local function, loading from disk`)
             // devnote ~ check that path is in project root, and/or added to git.
             // -> for unknown consumers of this repo
             // -> for other forks/download of this repo to work correctly 

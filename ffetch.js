@@ -1,5 +1,5 @@
 module.exports = function (fetch_code) {
-    let print = require('./dev-printer')(printerOn = true)
+    let print = require('./dev-printer')(printerOn = false)
 
     if (typeof fetch_code === "string") {
         fetch_code = require('./cache-barrel')(fetch_code)
@@ -29,7 +29,7 @@ module.exports = function (fetch_code) {
     //     then (/.function2) is resolved to example.com/demo2/etc5xyz.js
     let resolve_name = (dependency) => {
         let dep = dependency
-        console.log('------> resolve -> dep: ' + dep)
+        print('------> resolve -> dep: ' + dep)
 
         // only resolve relative names given by ./ or ../../ etc..
         if(!dep.startsWith('.')){
@@ -51,28 +51,28 @@ module.exports = function (fetch_code) {
         // assumption, only local disk resolve // todo! web resolve.
 
         if (typeof ffetch_path !== "undefined") {
-            console.log('resolve_name we know ffetch_path is: ' + ffetch_path)
+            print('resolve_name we know ffetch_path is: ' + ffetch_path)
 
             const path = require('path')
             let root_dir = path.dirname(ffetch_path)
 
-            console.log('root is : ' + root_dir)
+            print('root is : ' + root_dir)
 
             let target = path.join(root_dir, dependency)
 
-            console.log('relative dependency changed to: ' + target)
+            print('relative dependency changed to: ' + target)
 
             return target
         }
         else {
-            console.log('resolve_name set root?')
+            print('resolve_name set root?')
             return dependency
         }
     }
 
     let build = (code, context, ffetch_path) => {
         // let build = (code, context) => {
-        print('build - code: ' + code.length + ' loc')
+        // print('build - code: ' + code.length + ' loc')
         // print('build - context: ' + context)
         // let fun = (new Function(`return ((ff) => (async ${code}))`))()(context);
 
@@ -95,12 +95,12 @@ module.exports = function (fetch_code) {
         (async () => {
             try {
                 if (typeof ff !== "undefined")
-                    console.log('in fetch_and_build we know ff is: ' + ff)
+                    print('in fetch_and_build we know ff is: ' + ff)
 
                 if (typeof ffetch_path !== "undefined") {
-                    console.log('in fetch_and_build we know ffetch_path is: ' + ffetch_path)
+                    print('in fetch_and_build we know ffetch_path is: ' + ffetch_path)
                 } else {
-                    console.log('in fetch_and_build, no ffetch_path, too late to set initial root?')
+                    print('in fetch_and_build, no ffetch_path, too late to set initial root?')
                 }
 
                 let resource = await resolve_name(resourcePath)
@@ -114,8 +114,7 @@ module.exports = function (fetch_code) {
             }
         })()
 
-    print('fetchandbuild--------')
-    print(fetch_and_build)
+    print('ffetch returns a ' + fetch_and_build)
 
     return fetch_and_build
 }
