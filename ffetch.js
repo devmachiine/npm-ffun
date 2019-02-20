@@ -35,9 +35,16 @@ module.exports = function (fetch_code) {
         if(!dep.startsWith('.')){
             return dep
         }
-
-        // full path isnt' relative. // devnote ~ this isnt needed because  of above rule.
+        
         if (dep.startsWith(`https://`)) {
+            // TODO to find relative path code as it was, instad of currently always dynamic resolver.
+            // write 'treewalkers'
+            // eg for github, it has https..github..commit..code
+            //     relative-> with ..path..[code as it was found at same root commit time]
+            // eg for own api's, a standard like
+            //                https..url../[timestamp]/..paths../...code
+            //     relative -> with (same-url-root)[same timestamp]../..paths../..code
+
             return dep
         }
 
