@@ -53,7 +53,7 @@ Also, there is no benefit in re-testing and re-building the same things over and
 
 However the version number only reflects the interactions with a package/library. Sometimes. The behaviour changes from version to version, and a 0.0.x bump could still be a breaking change anyway.
 
-What we want is to re-use shared code, without pushing breaking changes to unknown consumers, and signal updates that people can opt into. *(ex. security and performance improvements)*
+What we want is to re-use shared code, without pushing breaking changes to unknown consumers, and signal updates that people can opt into. *(ex. security, bugfixes and performance improvements)*
 
 ## Futher work
 
