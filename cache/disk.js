@@ -1,7 +1,6 @@
 module.exports = function (cache_dir, fetch_value) {
 
     const fs = require('fs')
-
     const print = require('../dev-printer')(printerOn = false)
 
     // Init file cache
@@ -49,7 +48,9 @@ module.exports = function (cache_dir, fetch_value) {
             } else {
                 print('disk cache miss')
 
-                if (!filename.startsWith('https://'))
+                let namepart = require('path').basename(filename)
+                print('namepart:' +namepart)
+                if (!namepart.startsWith('https_--'))
                     throw `Could not find file: ${filename}`
 
                 return fetch_value(dependency).then((val) => disk_add(filename, val))

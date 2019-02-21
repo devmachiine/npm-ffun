@@ -33,6 +33,7 @@ module.exports = function (fetch_code) {
 
         // only resolve relative names given by ./ or ../../ etc..
         if(!dep.startsWith('.')){
+            print('!startswith .')
             return dep
         }
         
@@ -44,6 +45,8 @@ module.exports = function (fetch_code) {
             // eg for own api's, a standard like
             //                https..url../[timestamp]/..paths../...code
             //     relative -> with (same-url-root)[same timestamp]../..paths../..code
+
+            print('startsswith https')
 
             return dep
         }
@@ -103,9 +106,13 @@ module.exports = function (fetch_code) {
                     print('in fetch_and_build, no ffetch_path, too late to set initial root?')
                 }
 
+                print('f&b')
                 let resource = await resolve_name(resourcePath)
+                print('f&b resource: ' + resource)
                 let code = await fetch_code(resource)
+                print('f&b code: ' + code)
                 let func = await build(code, fetch_and_build, resource)
+                print('f&b func: ' + func)
 
                 return func(...funcArgs)
 
