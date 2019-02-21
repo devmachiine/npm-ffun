@@ -28,11 +28,10 @@
     let local_test = test("local function ffetches and computes as expected",
         () => { assert(`${result_twelve} == 12`) })
 
-    let add = ff('https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/2f980ee176dfa76d03dda4bf1737c3fe6a727eae/add.js')
+    let add = ff('https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/59fdf8c2031d2418539adb98dfad73fcd1469acd/add.js')
     let result_fifty = await add(34, 16)
     let url_test = test("remote function ffetches and computes as expected",
-        () => assert(`${result_fifty} == 51`))  
-    // todo 51 because dependency is due for upgrade, use good function and do update as separate test.
+        () => assert(`${result_fifty} == 50`))
 
     let test_test = await ffp('./tests/test-test.js')(test_framework)
     let test_injection = test("test framework can be injected into functions", () => {
@@ -49,10 +48,20 @@
             total++
         })
         // todo error/errors test/tests grammar.
-        console.log(`Ran ${total} tests${errors > 0 ? ` with ${errors} errors !!` : ' successfully.'}`)
+        let ss = n => n > 1 ? 's' : ''
+        console.log(`Ran ${total} test${ss(total)}${errors > 0 ? ` with ${errors} error${ss(errors)} !!` : ' successfully.'}`)
     }
 
     tally_display(test_injection, local_test, url_test)
+
+    // pending tests:
+    // local load local
+    // local load remote
+    // local load relative
+    // remote load remote
+    // remote load relative
+    // maybe - local and remote, nesting all tests above
+    // maybe - dependency upgrade, or signal ~ if it's to be part of this POC.
 
     var end = new Date().getTime();
     var time = end - start_time;
