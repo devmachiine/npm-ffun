@@ -1,12 +1,21 @@
 module.exports = function (cache_dir, fetch_value) {
 
     const fs = require('fs')
+    const path = require('path')
+
     const print = require('../dev-printer')(printerOn = false)
 
     // Init file cache
-
     if (!fs.existsSync(cache_dir)) {
-        fs.mkdirSync(cache_dir);
+        // fs.mkdirSync(cache_dir);
+        let full_dir = path.resolve(cache_dir)
+        let error_reason = 'Rather a hard error than just creating a directory unexpectedly :'
+        let expected_dir = `!! Directory [${cache_dir}] does not exist,
+        --> please create [${full_dir}] or provide an existing directory : require('./ffetch')([over here]).`
+        console.log('__'.repeat(55))
+        console.log(`${error_reason}\n\n${expected_dir}`)
+        console.log('^^'.repeat(55))
+        throw expected_dir
     }
 
     let disk_fetch = (file) => new Promise((resolve, _reject) => {
@@ -48,7 +57,7 @@ module.exports = function (cache_dir, fetch_value) {
             } else {
                 print('disk cache miss')
 
-                let namepart = require('path').basename(filename)
+                let namepart = path.basename(filename)
                 print('namepart:' +namepart)
                 if (!namepart.startsWith('https_--'))
                     throw `Could not find file: ${filename}`
@@ -56,7 +65,8 @@ module.exports = function (cache_dir, fetch_value) {
                 return fetch_value(dependency).then((val) => disk_add(filename, val))
             }
 
-        }).catch(err => 'disk cache error -> ' + err) // Todo don't return text message as code result
+        })
+        //.catch(err => 'disk cache error -> ' + err) // Todo don't return text message as code, return result type?
     }
 
     return lookup
