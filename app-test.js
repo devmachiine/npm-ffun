@@ -39,11 +39,13 @@
 
     /* Test behaviour from within a ffetched function */
 
-    let test_local_local = await ff('./tests/self-contained/local/local-load-local.js')(test, assert)
-    let test_local_remote = await ff('./tests/self-contained/local/local-load-remote.js')(test, assert)
+    let directory_files = require('./dev-utils/directory-file-list')
 
-    let extra_results = tally_results(test_local_local, test_local_remote)
+    let extra_tests = await Promise.all(
+        directory_files('./tests/self-contained/')
+        .map(test_path => ff(test_path)(test, assert)))
 
+    let extra_results = tally_results(...extra_tests)
     let { overview: extended_result, error_messages: extended_errors } = extra_results
     print(`Inner - ${extended_result}\n${extended_errors}`)
 
