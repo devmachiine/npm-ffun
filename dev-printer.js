@@ -1,1 +1,1 @@
-module.exports = (printerOn = true) => printerOn ? console.log : (_message) => 0
+module.exports = (printerOn = true) => (msg, show = true) => printerOn && show ? console.log(msg) : (_message) => 0

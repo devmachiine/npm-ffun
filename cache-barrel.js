@@ -1,6 +1,4 @@
 module.exports = function (cacheDir) {
-    const print = require('./dev-printer')(printerOn = false)
-    print('cache dir: ' + cacheDir)
 
     // use 'the internet' cache
     const fetch = require('./node-fetch')
