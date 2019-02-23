@@ -1,25 +1,12 @@
 (async () => {
 
     // Setup
-    console.log('_'.repeat(65))
-    var start_time = new Date().getTime();
-    let print = require('./dev-utils/dev-printer')()
+    let print = console.log
+    print('_'.repeat(65))
+    let start_time = new Date().getTime();
 
-    // ffetch
     let ff = require('./ffetch')('c:/shelf')
-
-    // test_framework
-    let test_framework = require('./dev-utils/test-framework')
-    let { test, assert, display_message } = test_framework
-    let display = (result) => console.log(display_message(result))
-    let assert_test = (result, error_message) => {
-        if (result.error != error_message) {
-            let err = !error_message ? result.error :
-                `test did not fail as expected. ${result.error ?
-                    `(${error_message} <--> ${result.error})` : 'No errors.'}`
-            throw `\n [x] ${result.description}\n      --> ${err}`
-        }
-    }
+    let test_framework = { test, assert, display_message, tally_results, assert_test } = require('./dev-utils/test-framework')
 
     // Tests
 
@@ -46,20 +33,8 @@
     let test_scope = test("function scope initialy set to ffetched code",
         () => assert_test(outer_accesed, 'ReferenceError: _outer_val is not defined'))
 
-    let tally_display = (...results) => {
-        let total = 0, errors = 0
-        results.forEach(result => {
-            if (result.error) {
-                display(result)
-                errors++
-            }
-            total++
-        })
-        let ss = n => n > 1 ? 's' : ''
-        print(`Ran ${total} test${ss(total)}${errors > 0 ? ` with ${errors} error${ss(errors)} !!` : ' successfully.'}`)
-    }
-
-    tally_display(test_local, test_url, test_injection, test_scope)
+    let { overview, error_messages } = tally_results(test_local, test_url, test_injection, test_scope)
+    print(`\n${overview}\n${error_messages}`)
 
     // pending tests:
     // local load local
@@ -70,8 +45,8 @@
     // maybe - local and remote, nesting all tests above
     // maybe - dependency upgrade, or signal ~ if it's to be part of this POC.
 
-    var end = new Date().getTime();
-    var time = end - start_time;
+    let end = new Date().getTime();
+    let time = end - start_time;
     print(`Completed in ~ ${time} ms`)
     print('_'.repeat(65))
 })()
