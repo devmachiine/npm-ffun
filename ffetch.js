@@ -22,6 +22,30 @@ module.exports = function (fetch_code) {
     //
     // const relative_fetch = require('/relative-fetch', fetch)
 
+    let web_resolve = (dependency) => {
+        // TODO to find relative path code as it was, instad of currently always dynamic resolver.
+        // write 'treewalkers'
+        // eg for github, it has https..github..commit..code
+        //     relative-> with ..path..[code as it was found at same root commit time]
+        // eg for own api's, a standard like
+        //                https..url../[timestamp]/..paths../...code
+        //     relative -> with (same-url-root)[same timestamp]../..paths../..code
+        print('web_resolve dependency : ' + dependency)
+        return dep
+    }
+
+    let local_resolve = (dependency) => {
+        let full_path = (file) =>
+            file.includes(__dirname) ? file
+                : require('path').join(__dirname, file)
+
+        let target = full_path(dependency)
+
+        print('relative dependency changed to: ' + target)
+
+        return target
+    }
+
     // Traverse/Root relative reference should be the same for web and local references.
 
     // todo resolver for extenal relative named functions
@@ -32,44 +56,28 @@ module.exports = function (fetch_code) {
         print('------> resolve -> dep: ' + dep)
 
         // only resolve relative names given by ./ or ../../ etc..
-        if(!dep.startsWith('.')){
+        if (!dep.startsWith('.')) {
             print('!startswith .')
             return dep
         }
-        
+
         if (dep.startsWith(`https://`)) {
-            // TODO to find relative path code as it was, instad of currently always dynamic resolver.
-            // write 'treewalkers'
-            // eg for github, it has https..github..commit..code
-            //     relative-> with ..path..[code as it was found at same root commit time]
-            // eg for own api's, a standard like
-            //                https..url../[timestamp]/..paths../...code
-            //     relative -> with (same-url-root)[same timestamp]../..paths../..code
-
-            print('startsswith https')
-
-            return dep
+            return web_resolve(dep)
         }
-
-        // assumption, only local disk resolve // todo! web resolve.
 
         if (typeof ffetch_path !== "undefined") {
             print('resolve_name we know ffetch_path is: ' + ffetch_path)
 
-            const path = require('path')
-            let root_dir = path.dirname(ffetch_path)
+            //todo NB if ffetch_path = web, use web resolver.
 
-            print('root is : ' + root_dir)
-
-            let target = path.join(root_dir, dependency)
-
-            print('relative dependency changed to: ' + target)
-
-            return target
+            // assumption, only local disk resolve 
+            return local_resolve(dependency)
         }
         else {
             print('resolve_name set root?')
-            return dependency
+            // assumption, only local disk resolve 
+
+            return local_resolve(dependency)
         }
     }
 
@@ -84,12 +92,7 @@ module.exports = function (fetch_code) {
             return context
         })()
 
-        // let ffetch2 = path => (...params) => context(path, ...params)
-
-        // let fun = (new Function(`return ((ff,f2) => (async ${code}))`))()(fb, ffetch2);
         let fun = (new Function(`return ((ff) => (async ${code}))`))()(fb);
-
-        // print('funky funk built: ' + fun2)
 
         return fun
     }
@@ -121,7 +124,7 @@ module.exports = function (fetch_code) {
             }
         })()
 
-    print('ffetch returns a ' + fetch_and_build)
+    print('ffetch returns a ' + fetch_and_build, false)
 
     return fetch_and_build
 }

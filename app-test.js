@@ -3,17 +3,11 @@
     // Setup
 
     // time app-teset
-    console.log('- '.repeat(40))
+    console.log('_'.repeat(65))
     var start_time = new Date().getTime();
 
     // ffetch
-    // let ff = require('./ffetch')('./shelf') //todo/think is this expected usage, for fix below?
-    let ff = require('./ffetch')('c:/shelf/')
-    //todo move full_path into ffetch? (and check 2nd arg!)
-    let full_path = (file) =>
-        file.includes(__dirname) ? file
-            : require('path').join(__dirname, file)
-    let ffp = (path) => ff(full_path(path))
+    let ff = require('./ffetch')('c:/shelf')
 
     // test_framework
     let test_framework = require('./test')
@@ -21,9 +15,9 @@
     let display = (result) => console.log(display_message(result))
     let assert_test = (result, error_message) => {
         if (result.error != error_message) {
-            let err = error_message ? `test did not fail as expected. ${result.error ?
-                `(${error_message} <--> ${result.error})` : 'No errors.'}`
-                : result.error
+            let err = !error_message ? result.error :
+                `test did not fail as expected. ${result.error ?
+                    `(${error_message} <--> ${result.error})` : 'No errors.'}`
             throw `\n [x] ${result.description}\n      --> ${err}`
         }
     }
@@ -31,7 +25,7 @@
     // Tests
 
     // local
-    let multiply = ffp('./functions/multiply.js')
+    let multiply = ff('./functions/multiply.js')
     let result_twelve = await multiply(3, 4)
     let test_local = test("local function ffetches and computes as expected",
         () => assert(`${result_twelve} == 12`))
@@ -43,13 +37,13 @@
         () => assert(`${result_fifty} == 50`))
 
     // injection
-    let test_test = await ffp('./tests/test-test.js')(test_framework)
+    let test_test = await ff('./tests/test-test.js')(test_framework)
     let test_injection = test("test framework can be injected into functions",
         () => assert_test(test_test))
 
     // scope (access to outer still possible)
     let _outer_val = 1
-    let outer_accesed = await ffp('./tests/test-scope.js')(test_framework)
+    let outer_accesed = await ff('./tests/test-scope.js')(test_framework)
     let test_scope = test("function scope initialy set to ffetched code",
         () => assert_test(outer_accesed, 'ReferenceError: _outer_val is not defined'))
 
@@ -62,7 +56,6 @@
             }
             total++
         })
-        // todo error/errors test/tests grammar.
         let ss = n => n > 1 ? 's' : ''
         console.log(`Ran ${total} test${ss(total)}${errors > 0 ? ` with ${errors} error${ss(errors)} !!` : ' successfully.'}`)
     }
@@ -81,5 +74,5 @@
     var end = new Date().getTime();
     var time = end - start_time;
     console.log(`Completed in ~ ${time} ms`)
-    console.log('- '.repeat(40))
+    console.log('_'.repeat(65))
 })()
