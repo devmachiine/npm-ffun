@@ -1,7 +1,5 @@
 module.exports = function (https_url) {
-
-    const https = require('https');
-
+    const https = require('https')
     return new Promise((resolve, reject) => {
 
         https.get(https_url, (resp) => {

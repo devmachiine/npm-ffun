@@ -1,8 +1,8 @@
 module.exports = function (fetch_code) {
-    let print = require('./dev-printer')(printerOn = false)
+    let print = require('./dev-utils/dev-printer')(printerOn = false)
 
     if (typeof fetch_code === "string") {
-        fetch_code = require('./cache-barrel')(fetch_code)
+        fetch_code = require('./storage/cache-stack')(fetch_code)
     }
     else if (typeof fetch_code !== "function") {
         throw ('require(ff)(directory-string || dependency-resolver-function')

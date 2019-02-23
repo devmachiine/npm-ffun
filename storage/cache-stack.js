@@ -1,7 +1,7 @@
 module.exports = function (cacheDir) {
 
     // use 'the internet' cache
-    const fetch = require('./node-fetch')
+    const fetch = require('./cache/web')
 
     // behind the disk cache
     let disk_or_web = require('./cache/disk')(cacheDir, fetch)

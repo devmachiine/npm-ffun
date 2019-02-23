@@ -73,7 +73,7 @@ Just as any central repository (Github <3, brew.sh, etc..) can evaporate, that p
 
 Takes single function, that returns source code for a given path or url, and returns a Promise(function)
 
-### ffetch(argument) ~ Directory name, or cache-barrel function
+### ffetch(argument) ~ Directory name, or cache-stack function
 
 If the first argument isn't a directory name, it expects a dependency-resolver-function:
 

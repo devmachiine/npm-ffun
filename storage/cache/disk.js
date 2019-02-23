@@ -3,7 +3,7 @@ module.exports = function (cache_dir, fetch_value) {
     const fs = require('fs')
     const path = require('path')
 
-    const print = require('../dev-printer')(printerOn = false)
+    const print = require('../../dev-utils/dev-printer')(printerOn = false)
 
     // Init file cache
     if (!fs.existsSync(cache_dir)) {
