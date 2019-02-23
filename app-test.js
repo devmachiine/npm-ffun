@@ -33,18 +33,23 @@
     let test_scope = test("function scope initialy set to ffetched code",
         () => assert_test(outer_accesed, 'ReferenceError: _outer_val is not defined'))
 
-    let { overview: basic_result, error_messages: basic_errors } = tally_results(test_local, test_url, test_injection, test_scope)
+    let basic_results = tally_results(test_local, test_url, test_injection, test_scope)
+    let { overview: basic_result, error_messages: basic_errors } = basic_results
     print(`Outer - ${basic_result}\n${basic_errors}`)
 
     /* Test behaviour from within a ffetched function */
 
     let test_local_local = await ff('./tests/self-contained/local/local-load-local.js')(test, assert)
-    let { overview: extended_result, error_messages: extended_errors } = tally_results(test_local_local)
+    let test_local_remote = await ff('./tests/self-contained/local/local-load-remote.js')(test, assert)
+
+    let extra_results = tally_results(test_local_local, test_local_remote)
+
+    let { overview: extended_result, error_messages: extended_errors } = extra_results
     print(`Inner - ${extended_result}\n${extended_errors}`)
 
     // pending tests:
     // [x] local load local
-    // [ ] local load remote
+    // [x] local load remote
     // [ ] local load relative
     // [ ] remote load remote
     // [ ] remote load relative
