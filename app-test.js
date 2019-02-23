@@ -8,7 +8,7 @@
     let ff = require('./ffetch')('c:/shelf')
     let test_framework = { test, assert, display_message, tally_results, assert_test } = require('./dev-utils/test-framework')
 
-    // Tests
+    /* Test basics */
 
     // local
     let multiply = ff('./tests/external-setup/multiply.js')
@@ -33,17 +33,23 @@
     let test_scope = test("function scope initialy set to ffetched code",
         () => assert_test(outer_accesed, 'ReferenceError: _outer_val is not defined'))
 
-    let { overview, error_messages } = tally_results(test_local, test_url, test_injection, test_scope)
-    print(`\n${overview}\n${error_messages}`)
+    let { overview: basic_result, error_messages: basic_errors } = tally_results(test_local, test_url, test_injection, test_scope)
+    print(`Outer - ${basic_result}\n${basic_errors}`)
+
+    /* Test behaviour from within a ffetched function */
+
+    let test_local_local = await ff('./tests/self-contained/local/local-load-local.js')(test, assert)
+    let { overview: extended_result, error_messages: extended_errors } = tally_results(test_local_local)
+    print(`Inner - ${extended_result}\n${extended_errors}`)
 
     // pending tests:
-    // local load local
-    // local load remote
-    // local load relative
-    // remote load remote
-    // remote load relative
-    // maybe - local and remote, nesting all tests above
-    // maybe - dependency upgrade, or signal ~ if it's to be part of this POC.
+    // [x] local load local
+    // [ ] local load remote
+    // [ ] local load relative
+    // [ ] remote load remote
+    // [ ] remote load relative
+    // [ ] maybe - local and remote, nesting all tests above
+    // [ ] maybe - dependency upgrade, or signal ~ if it's to be part of this POC.
 
     let end = new Date().getTime();
     let time = end - start_time;
