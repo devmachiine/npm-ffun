@@ -1,4 +1,4 @@
-module.exports = function (fetch_code) {
+module.exports = function (fetch_code, root_dir) {
     let print = require('./dev-utils/dev-printer')(printerOn = false)
 
     if (typeof fetch_code === "string") {
@@ -7,6 +7,11 @@ module.exports = function (fetch_code) {
     else if (typeof fetch_code !== "function") {
         throw ('require(ff)(directory-string || dependency-resolver-function')
     }
+
+    const path = require('path')
+
+    // alternatives - https://stackoverflow.com/questions/10265798/determine-project-root-from-a-running-node-js-application
+    root_dir = root_dir || path.dirname(require.main.filename)
 
     // todo: use ./ in http as domain root to resolve dependency path
     // example
@@ -34,10 +39,11 @@ module.exports = function (fetch_code) {
         return dep
     }
 
+    // todo - is this disk abstraction bleed that could be handled in disk.js ?
     let local_resolve = (dependency) => {
         let full_path = (file) =>
-            file.includes(__dirname) ? file
-                : require('path').join(__dirname, file)
+            file.includes(root_dir) ? file
+                : path.join(root_dir, file)
 
         let target = full_path(dependency)
 
