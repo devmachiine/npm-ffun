@@ -35,7 +35,7 @@
 
     let basic_results = tally_results(test_local, test_url, test_injection, test_scope)
     let { overview: basic_result, error_messages: basic_errors } = basic_results
-    print(`Outer - ${basic_result}\n${basic_errors}`)
+    print(`Basic - ${basic_result}\n${basic_errors}`)
 
     /* Test behaviour from within a ffetched function */
 
@@ -47,7 +47,7 @@
 
     let extra_results = tally_results(...extra_tests)
     let { overview: extended_result, error_messages: extended_errors } = extra_results
-    print(`Inner - ${extended_result}\n${extended_errors}`)
+    print(`Local - ${extended_result}\n${extended_errors}`)
 
     // pending tests:
     // [x] local load local
