@@ -20,7 +20,7 @@
     let add = ff('https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/59fdf8c2031d2418539adb98dfad73fcd1469acd/add.js')
     let result_fifty = await add(34, 16)
     let test_url = test("remote function ffetches and computes as expected",
-        () => assert(`${result_fifty} == 50`))
+        () => assert(`${result_fifty} === 50`))
 
     // injection
     let test_test = await ff('./tests/external-setup/test-test.js')(test_framework)
