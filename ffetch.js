@@ -126,7 +126,10 @@ module.exports = function (fetch_code, root_dir) {
                 return func(...funcArgs)
 
             } catch (oops) {
-                print('ffetch oops:' + oops);
+                print('ffetch oops:' + oops)
+                // todo try give resolved path
+                // todo remove test framework domain bleed and return result type, or re-throw?
+                return { description: `ffetch error in function \n\t[${resourcePath}]`, error : `\n\t${oops}`}
             }
         })()
 
