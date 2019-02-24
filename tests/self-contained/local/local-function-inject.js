@@ -1,5 +1,5 @@
 (test, assert) => {
-    let factorial = ff('./tests/external-setup/factorial.js')
+    let factorial = ff('./tests/external-setup/factorial-hof-input.js')
 
     let multiply = ff('./tests/external-setup/multiply.js')
 
