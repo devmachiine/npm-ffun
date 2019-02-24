@@ -98,7 +98,9 @@ module.exports = function (fetch_code, root_dir) {
             return context
         })()
 
-        let fun = (new Function(`return ((ff) => (async ${code}))`))()(fb);
+        // todo add external test that \n fixes comment parsing.
+
+        let fun = (new Function(`return ((ff) => (async ${code}\n))`))()(fb);
 
         return fun
     }
@@ -118,7 +120,7 @@ module.exports = function (fetch_code, root_dir) {
                 print('f&b')
                 let resource = await resolve_name(resourcePath)
                 print('f&b resource: ' + resource)
-                let code = await fetch_code(resource)
+                let code = '' + await fetch_code(resource)
                 print('f&b code: ' + code)
                 let func = await build(code, fetch_and_build, resource)
                 print('f&b func: ' + func)
@@ -128,8 +130,9 @@ module.exports = function (fetch_code, root_dir) {
             } catch (oops) {
                 print('ffetch oops:' + oops)
                 // todo try give resolved path
-                // todo remove test framework domain bleed and return result type, or re-throw?
-                return { description: `ffetch error in function \n\t[${resourcePath}]`, error : `\n\t${oops}`}
+                // todo remove test framework domain bleed and return result type?
+                // return { description: `ffetch error in function \n\t[${ resourcePath }]`, error : `\n\t${ oops } `}
+                throw `\n-- > ffetch error in ${resourcePath} \n-- > args: ${funcArgs} \n-- > oops: ${oops} `
             }
         })()
 
