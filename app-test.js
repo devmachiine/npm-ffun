@@ -52,11 +52,11 @@
     // pending tests:
     // [x] local load local
     // [x] local load remote
-    // [ ] local load relative
     // [ ] remote load remote
     // [ ] remote load relative
     // [ ] maybe - local and remote, nesting all tests above
     // [ ] maybe - dependency upgrade, or signal ~ if it's to be part of this POC.
+    // [ ] maybe *not* local load relative
 
     let end = new Date().getTime();
     let time = end - start_time;
