@@ -100,6 +100,10 @@ module.exports = function (fetch_code, root_dir) {
 
         // todo add external test that \n fixes comment parsing.
 
+        // todo better error messages for incorrect code, eg:
+        // empty or comment-only code gives -> async is not defined
+        // code that doesn't start with expression gives -> SyntaxError: Unexpected token (
+
         let fun = (new Function(`return ((ff) => (async ${code}\n))`))()(fb);
 
         return fun
