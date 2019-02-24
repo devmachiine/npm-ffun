@@ -9,7 +9,7 @@
 
     return test('local functions can retrieve other functions',
         () => {
-            assert(`${six} === 6`)
-            assert(`${await_and_call} === 6`)
+            assert(six, 6)
+            assert(await_and_call, 6)
         })
 }
