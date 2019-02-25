@@ -98,8 +98,6 @@ module.exports = function (fetch_code, root_dir) {
             return context
         })()
 
-        // todo add external test that \n fixes comment parsing.
-
         // todo better error messages for incorrect code, eg:
         // empty or comment-only code gives -> async is not defined
         // code that doesn't start with expression gives -> SyntaxError: Unexpected token (
@@ -133,10 +131,8 @@ module.exports = function (fetch_code, root_dir) {
 
             } catch (oops) {
                 print('ffetch oops:' + oops)
-                // todo try give resolved path
-                // todo remove test framework domain bleed and return result type?
-                // return { description: `ffetch error in function \n\t[${ resourcePath }]`, error : `\n\t${ oops } `}
-                throw `\n-- > ffetch error in ${resourcePath} \n-- > args: ${funcArgs} \n-- > oops: ${oops} `
+                // todo return result type? { code: .. (or undefined), author, timestamp, hash }
+                throw `ffetch error ${resourcePath} with args (${funcArgs}) --> ${oops}`
             }
         })()
 
