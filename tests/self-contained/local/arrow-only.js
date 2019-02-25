@@ -1,0 +1,1 @@
+=> 'even just an arrow yielding a value is fine, as it gets converted into (async => even just an arrow...)'
