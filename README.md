@@ -18,9 +18,8 @@ You find the code you need in `https://example.com/url/math/addition-1992.js`
 Your nodejs app could import just the code it needs:
 
 ```javascript
-// require ffetch and point it to a directory
-// so that code is only ever downloaded once from the web
-const ff = require('./ffetch.js')('./shelf') 
+// require ffetch with defaults()
+const ff = require('ffetch')()
 
 // url (or local file path) to our dependency
 let path = 'https://example.com/url/math/addition-1992.js'
