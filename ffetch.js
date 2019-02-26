@@ -1,17 +1,27 @@
 module.exports = function (fetch_code, root_dir) {
     let print = require('./dev-utils/dev-printer')(printerOn = false)
 
+    const path = require('path')
+
+    // alternatives - https://stackoverflow.com/questions/10265798/determine-project-root-from-a-running-node-js-application
+    root_dir = root_dir || path.dirname(require.main.filename)
+
+    if (typeof fetch_code === 'undefined') {
+        let default_cache_dir = path.join(root_dir, './shelf')
+        let fs = require('fs')
+        if (!fs.existsSync(default_cache_dir)) {
+            console.log('>> default cache dir created in app root: ' + default_cache_dir)
+            fs.mkdirSync(default_cache_dir)
+        }
+        fetch_code = default_cache_dir
+    }
+
     if (typeof fetch_code === "string") {
         fetch_code = require('./storage/cache-stack')(fetch_code)
     }
     else if (typeof fetch_code !== "function") {
         throw ('require(ff)(directory-string || dependency-resolver-function')
     }
-
-    const path = require('path')
-
-    // alternatives - https://stackoverflow.com/questions/10265798/determine-project-root-from-a-running-node-js-application
-    root_dir = root_dir || path.dirname(require.main.filename)
 
     // todo: use ./ in http as domain root to resolve dependency path
     // example

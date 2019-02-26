@@ -5,7 +5,7 @@
     print('_'.repeat(65))
     let start_time = new Date().getTime();
 
-    let ff = require('./ffetch')('c:/shelf')
+    let ff = require('./ffetch')()
     let test_framework = { test, assert, display_message, tally_results, assert_test } = require('./dev-utils/test-framework')
 
     /* Test basics */
