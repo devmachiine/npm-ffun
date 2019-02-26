@@ -1,19 +1,19 @@
-module.exports = function (cache_dir, fetch_value) {
+module.exports = function (cache_dir, fetch_code) {
 
     const fs = require('fs')
     const path = require('path')
 
     const print = require('../../dev-utils/dev-printer')(printerOn = false)
 
-    // Init file cache
     if (!fs.existsSync(cache_dir)) {
-        // fs.mkdirSync(cache_dir);
         let full_dir = path.resolve(cache_dir)
-        let error_reason = 'Rather a hard error than just creating a directory unexpectedly :'
-        let expected_dir = `!! Directory [${cache_dir}] does not exist,
-        --> please create [${full_dir}] or provide an existing directory : require('./ffetch')([over here]).`
+        let err_text = `disk cache initialization error --> require('ffetch')(${cache_dir})\n\n`
+        err_text += ` * If you inteded to require('ffetch') with default settings\n`
+        err_text += `   you should add trailing empty params after import\n   --> const ffetch = require('ffetch')()`
+        let expected_dir = `!! Directory [${full_dir}] does not exist.
+        Either create [${full_dir}]\n\t\tor provide an existing directory.`
         console.log('__'.repeat(55))
-        console.log(`${error_reason}\n\n${expected_dir}`)
+        console.log(`${err_text}\n\n${expected_dir}`)
         console.log('^^'.repeat(55))
         throw expected_dir
     }
@@ -58,11 +58,11 @@ module.exports = function (cache_dir, fetch_value) {
                 print('disk cache miss')
 
                 let namepart = path.basename(filename)
-                print('namepart:' +namepart)
+                print('namepart:' + namepart)
                 if (!namepart.startsWith('https_--'))
                     throw `Could not find file: ${filename}`
 
-                return fetch_value(dependency).then((val) => disk_add(filename, val))
+                return fetch_code(dependency).then((val) => disk_add(filename, val))
             }
 
         })
