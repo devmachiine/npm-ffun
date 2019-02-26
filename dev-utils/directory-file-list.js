@@ -3,18 +3,16 @@ module.exports = (directory) => {
     let fs = require('fs')
     let path = require('path')
 
-    let root_dir = path.dirname(require.main.filename)
-
-    let full_path = (file) =>
-        file.includes(root_dir) ? file
-            : require('path').join(root_dir, file)
-
     let file_names = (dir) =>
-        fs.readdirSync(dir).reduce((names, file) => {
-            let full_path = path.join(dir, file)
-            let is_file = fs.statSync(full_path).isFile()
-            return names.concat(is_file ? [full_path] : file_names(full_path))
-        }, [])
+        fs.readdirSync(dir)
+            .map(f => path.join(dir, f))
+            .reduce((acc_files, current_path) => {
+                let is_file = fs.statSync(current_path).isFile()
+                return acc_files.concat(is_file ? [current_path] : file_names(current_path))
+            }, [])
 
-    return file_names(full_path(directory))
+    let root_dir = path.dirname(require.main.filename)
+    let relative_dir = path.join(root_dir, directory)
+
+    return file_names(relative_dir)
 }

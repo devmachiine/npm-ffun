@@ -82,7 +82,7 @@ module.exports = function (fetch_code, root_dir) {
         }
 
         if (typeof ffetch_path !== "undefined") {
-            print('resolve_name we know ffetch_path is: ' + ffetch_path)
+            print('resolve_name.ffetch_path = ' + ffetch_path)
 
             //todo NB if ffetch_path = web, use web resolver.
 
@@ -121,10 +121,10 @@ module.exports = function (fetch_code, root_dir) {
         (async () => {
             try {
                 if (typeof ff !== "undefined")
-                    print('in fetch_and_build we know ff is: ' + ff)
+                    print('fetch_and_build.ff = ' + ff)
 
                 if (typeof ffetch_path !== "undefined") {
-                    print('in fetch_and_build we know ffetch_path is: ' + ffetch_path)
+                    print('fetch_and_build.ffetch_path = ' + ffetch_path)
                 } else {
                     print('in fetch_and_build, no ffetch_path, too late to set initial root?')
                 }
