@@ -1,5 +1,7 @@
 module.exports = function (fetch_code, root_dir) {
-    let print = require('./dev-utils/dev-printer')(printerOn = false)
+    
+    // const debug_mode = true
+    const print = typeof debug_mode === 'undefined' ? () => 0 : console.debug
 
     const path = require('path')
 

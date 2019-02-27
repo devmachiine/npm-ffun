@@ -3,7 +3,8 @@ module.exports = function (cache_dir, fetch_code) {
     const fs = require('fs')
     const path = require('path')
 
-    const print = require('../../dev-utils/dev-printer')(printerOn = false)
+    // const debug_mode = true
+    const print = typeof debug_mode === 'undefined' ? () => 0 : console.debug
 
     if (!fs.existsSync(cache_dir)) {
         let full_dir = path.resolve(cache_dir)
@@ -12,9 +13,9 @@ module.exports = function (cache_dir, fetch_code) {
         err_text += `   you should add trailing empty params after import\n   --> const ffetch = require('ffetch')()`
         let expected_dir = `!! Directory [${full_dir}] does not exist.
         Either create [${full_dir}]\n\t\tor provide an existing directory.`
-        console.log('__'.repeat(55))
-        console.log(`${err_text}\n\n${expected_dir}`)
-        console.log('^^'.repeat(55))
+        console.error('__'.repeat(55))
+        console.error(`${err_text}\n\n${expected_dir}`)
+        console.error('^^'.repeat(55))
         throw expected_dir
     }
 
@@ -66,7 +67,8 @@ module.exports = function (cache_dir, fetch_code) {
                 print('disk cache miss')
 
                 if (!filename.startsWith(cache_dir)) {
-                    throw `Error in ${path.basename(__filename)}: Invalid cache directory for file: ${filename}`
+                    throw `Error in ${path.basename(__filename)}: Invalid cache directory for file: ${filename}.
+                    Expected to start with [${cache_dir}]`
                 }
 
                 return fetch_code(dependency).then((val) => disk_add(filename, val))
