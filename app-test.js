@@ -6,14 +6,22 @@
     let start_time = new Date().getTime();
 
     let ff = require('./ffetch')()
-    let test_framework = { test, assert, display_message, tally_results, assert_test } = require('./dev-utils/test-framework')
+    let test_framework = {
+        test, assert, display_message, tally_results, assert_test
+    } = require('./dev-utils/test-framework')
 
     /* Test basics */
 
-    // local
+    // local - root
+    let greeting = ff('./hello-fetch.js')
+    let result_hello = await greeting('forest')
+    let test_local_root = test("local function ffetches and computes as expected",
+        () => assert(result_hello, 'Hello, forest!'))
+
+    // local - nested
     let multiply = ff('./tests/external-setup/multiply.js')
     let result_twelve = await multiply(3, 4)
-    let test_local = test("local function ffetches and computes as expected",
+    let test_local_nested = test("local function ffetches and computes as expected",
         () => assert(result_twelve, 12))
 
     // url
@@ -33,9 +41,9 @@
     let test_scope = test("function scope initialy set to ffetched code",
         () => assert_test(outer_accesed, 'ReferenceError: _outer_val is not defined'))
 
-    let basic_results = tally_results(test_local, test_url, test_injection, test_scope)
+    let basic_results = tally_results(test_local_root, test_local_nested, test_url, test_injection, test_scope)
     let { overview: basic_result, error_messages: basic_errors } = basic_results
-    print(`Basic - ${basic_result}\n${basic_errors}`)
+    print(`Basic ${basic_result}\n${basic_errors}`)
 
     /* Test behaviour from within a ffetched function */
 
@@ -43,11 +51,11 @@
 
     let extra_tests = await Promise.all(
         directory_files('./tests/self-contained/')
-        .map(test_path => ff(test_path)(test, assert)))
+            .map(test_path => ff(test_path)(test, assert)))
 
     let extra_results = tally_results(...extra_tests)
     let { overview: extended_result, error_messages: extended_errors } = extra_results
-    print(`Extra - ${extended_result}\n${extended_errors}`)
+    print(`Extra ${extended_result}\n${extended_errors}`)
 
     // pending tests:
     // [x] local load local

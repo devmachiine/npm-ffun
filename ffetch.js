@@ -1,7 +1,7 @@
 module.exports = function (fetch_code, root_dir) {
-    
+
     // const debug_mode = true
-    const print = typeof debug_mode === 'undefined' ? () => 0 : console.debug
+    const print = typeof debug_mode === 'undefined' ? () => 0 : console.log
 
     const path = require('path')
 
@@ -22,6 +22,7 @@ module.exports = function (fetch_code, root_dir) {
         fetch_code = require('./storage/cache-stack')(fetch_code)
     }
     else if (typeof fetch_code !== "function") {
+        print('🤮 ffetch init')
         throw ('require(ff)(directory-string || dependency-resolver-function')
     }
 
@@ -29,15 +30,9 @@ module.exports = function (fetch_code, root_dir) {
     // example
     // https://raw.githubusercontent.com/username/project/branch/folder/folder2/some.js
     //
-    // Traverse upwards relative
-    // has reference to [/bla/other.js], and is found in:
-    // https://raw.githubusercontent.com/username/project/branch/folder/bla/other.js
-    //
     // Root relative
     // has reference to [./foo/bar.js], and is found in:
     // https://raw.githubusercontent.com/foo/bar.js
-    //
-    // const relative_fetch = require('/relative-fetch', fetch)
 
     let web_resolve = (dependency) => {
         // TODO to find relative path code as it was, instad of currently always dynamic resolver.
@@ -48,14 +43,27 @@ module.exports = function (fetch_code, root_dir) {
         //                https..url../[timestamp]/..paths../...code
         //     relative -> with (same-url-root)[same timestamp]../..paths../..code
         print('web_resolve dependency : ' + dependency)
-        return dep
+        return dependency
     }
 
     // todo - is this disk abstraction bleed that could be handled in disk.js ?
     let local_resolve = (dependency) => {
+
+        if(dependency.startsWith(root_dir)){
+            return dependency
+        }
+
+        // only resolve names from root source ./ ~or~ full_path 
+        if (!dependency.startsWith('./')) {
+            print("🤮 ffetch invalid dep")
+            throw `missing './' --> required ffetch('./[path]'), but received ffetch(['${dependency}'])`
+        }
+
         let full_path = (file) =>
             file.includes(root_dir) ? file
                 : path.join(root_dir, file)
+
+        // .startsWith('./')
 
         let target = full_path(dependency)
 
@@ -66,21 +74,14 @@ module.exports = function (fetch_code, root_dir) {
 
     // Traverse/Root relative reference should be the same for web and local references.
 
-    // todo resolver for extenal relative named functions
+    // todo find path for relative named functions
     // ex: function on example.com/funcAbc calls function (./function2)
     //     then (/.function2) is resolved to example.com/demo2/etc5xyz.js
     let resolve_name = (dependency) => {
-        let dep = dependency
-        print('------> resolve -> dep: ' + dep)
+        print('⚡ ffetch.resolve_name = ' + dependency)
 
-        // only resolve relative names given by ./ or ../../ etc..
-        if (!dep.startsWith('.')) {
-            print('!startswith .')
-            return dep
-        }
-
-        if (dep.startsWith(`https://`)) {
-            return web_resolve(dep)
+        if (dependency.startsWith(`https://`)) {
+            return web_resolve(dependency)
         }
 
         if (typeof ffetch_path !== "undefined") {
@@ -100,7 +101,6 @@ module.exports = function (fetch_code, root_dir) {
     }
 
     let build = (code, context, ffetch_path) => {
-        // let build = (code, context) => {
         // print('build - code: ' + code.length + ' loc')
         // print('build - context: ' + context)
 
@@ -141,13 +141,14 @@ module.exports = function (fetch_code, root_dir) {
                 return func(...funcArgs)
 
             } catch (oops) {
-                print(`ffetch oops: [${oops}]\n${JSON.stringify(oops)}`)
+                print(`🎣 ffetch oops: [${oops}]\n${JSON.stringify(oops)}`)
                 // todo return result type? { code: .. (or undefined), author, timestamp, hash }
+                print('🤮 rethrow ffetch oops')
                 throw `ffetch error ${resourcePath} with args (${funcArgs}) --> ${oops}`
             }
         })()
 
-    print('ffetch returns a ' + fetch_and_build, false)
+    // print('ffetch returns a ' + fetch_and_build)
 
     return fetch_and_build
 }
