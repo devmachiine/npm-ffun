@@ -131,18 +131,18 @@ module.exports = function (fetch_code, root_dir) {
 
                 print('f&b')
                 let resource = await resolve_name(resourcePath)
-                print('f&b resource: ' + resource)
+                print('f&b.resource = ' + resource)
                 let code = '' + await fetch_code(resource)
-                print('f&b code: ' + code)
+                print('f&b.code = ' + code.length)
                 let func = await build(code, fetch_and_build, resource)
-                print('f&b func: ' + func)
+                print('f&b.func = ' + func.toString().length)
 
                 return func(...funcArgs)
 
             } catch (oops) {
                 print('ffetch oops:' + oops)
                 // todo return result type? { code: .. (or undefined), author, timestamp, hash }
-                throw `ffetch error ${resourcePath} with args (${funcArgs}) --> ${oops}`
+                throw `ffetch error ${resourcePath} with args (${funcArgs}) --> ${oops}\n${JSON.stringify(oops)}`
             }
         })()
 
