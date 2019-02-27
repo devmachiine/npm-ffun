@@ -101,7 +101,6 @@ module.exports = function (fetch_code, root_dir) {
         // let build = (code, context) => {
         // print('build - code: ' + code.length + ' loc')
         // print('build - context: ' + context)
-        // let fun = (new Function(`return ((ff) => (async ${code}))`))()(context);
 
         let fb = (() => {
             this.ffetch_path = ffetch_path
@@ -140,9 +139,9 @@ module.exports = function (fetch_code, root_dir) {
                 return func(...funcArgs)
 
             } catch (oops) {
-                print('ffetch oops:' + oops)
+                print(`ffetch oops: [${oops}]\n${JSON.stringify(oops)}`)
                 // todo return result type? { code: .. (or undefined), author, timestamp, hash }
-                throw `ffetch error ${resourcePath} with args (${funcArgs}) --> ${oops}\n${JSON.stringify(oops)}`
+                throw `ffetch error ${resourcePath} with args (${funcArgs}) --> ${oops}`
             }
         })()
 
