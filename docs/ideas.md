@@ -7,3 +7,6 @@
 
  ff : fetch function async
  fi : get function now, non async ~ ff calls fi
+
+ [ ] Replace place oriented function arguments with a single object/map
+ [ ] Replace 'throw' with try type (and make try type module?)
