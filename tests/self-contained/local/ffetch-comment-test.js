@@ -8,11 +8,11 @@
         comments_error = err
     }
 
-    let expected_build_error = `ffetch error ./tests/external-setup/error-test-comment.js with args () --> SyntaxError: Unexpected token (`
+    let expected_build_error = new Error(`ffetch error ./tests/external-setup/error-test-comment.js with args () --> SyntaxError: Unexpected token (`)
     
     return test('comments can be used inside and after test functions',
         () => {
             assert(comments_ok, 'ok')
-            assert(comments_error, expected_build_error)
+            assert(comments_error.message, expected_build_error.message)
         })
 }

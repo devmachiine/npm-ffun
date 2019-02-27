@@ -144,7 +144,7 @@ module.exports = function (fetch_code, root_dir) {
                 print(`🎣 ffetch oops: [${oops}]\n${JSON.stringify(oops)}`)
                 // todo return result type? { code: .. (or undefined), author, timestamp, hash }
                 print('🤮 rethrow ffetch oops')
-                throw `ffetch error ${resourcePath} with args (${funcArgs}) --> ${oops}`
+                throw new Error(`ffetch error ${resourcePath} with args (${funcArgs}) --> ${oops}`)
             }
         })()
 

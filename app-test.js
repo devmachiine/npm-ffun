@@ -63,6 +63,8 @@
     // [x] remote load remote
     // [ ] remote load relative
 
+    // [ ] change all throw to throw new Error to get stacktrace
+    // [ ] change all throw/catch to result type (if re-use simple)
     // [ ] maybe - dependency upgrade, or signal ~ if it's to be part of this POC.
     // [ ] maybe *explicitly not* local load relative
 
@@ -70,4 +72,7 @@
     let time = end - start_time;
     print(`Completed in ~ ${time} ms`)
     print('_'.repeat(65))
-})()
+})().catch(err => {
+    console.log('🎣 app-test err!\n')
+    console.log(err.stack ? err.stack : '' + err)
+})
