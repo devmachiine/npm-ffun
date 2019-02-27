@@ -34,16 +34,16 @@ const assert_test = (result, error_message) => {
 }
 
 let tally_results = (...results) => {
-    let total = 0, errors = 0, error_messages = ''
+    let ok_tests = 0, err_tests = 0, error_messages = ''
     results.forEach(result => {
         if (result.error) {
             error_messages += display_message(result)
-            errors++
+            err_tests++
         }
-        total++
+        else ok_tests++
     })
     let ss = n => n > 1 ? 's' : ''
-    let overview = `Ran ${total} test${ss(total)}${errors > 0 ? ` with ${errors} error${ss(errors)} !!` : ' successfully.'}`
+    let overview = `${ok_tests} test${ss(ok_tests)} [ok] ${err_tests > 0 ? `..and ${err_tests} [error${ss(err_tests)}] ⚔️🔥` : '🌼'}`
     return { overview, error_messages }
 }
 
