@@ -23,7 +23,7 @@ module.exports = function (fetch_code, root_dir) {
     }
     else if (typeof fetch_code !== "function") {
         print('🤮 ffetch init')
-        throw ('require(ff)(directory-string || dependency-resolver-function')
+        throw new Error('require(ff)(directory-string || dependency-resolver-function')
     }
 
     // todo: use ./ in http as domain root to resolve dependency path
@@ -56,7 +56,7 @@ module.exports = function (fetch_code, root_dir) {
         // only resolve names from root source ./ ~or~ full_path 
         if (!dependency.startsWith('./')) {
             print("🤮 ffetch invalid dep")
-            throw `missing './' --> required ffetch('./[path]'), but received ffetch(['${dependency}'])`
+            throw new Error(`missing './' --> required ffetch('./[path]'), but received ffetch(['${dependency}'])`)
         }
 
         let full_path = (file) =>

@@ -63,8 +63,9 @@
     // [x] remote load remote
     // [ ] remote load relative
 
-    // [ ] change all throw to throw new Error to get stacktrace
+    // [x] change all throw to throw new Error to get stacktrace
     // [ ] change all throw/catch to result type (if re-use simple)
+    // [ ] test coverage
     // [ ] maybe - dependency upgrade, or signal ~ if it's to be part of this POC.
     // [ ] maybe *explicitly not* local load relative
 

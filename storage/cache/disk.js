@@ -17,7 +17,7 @@ module.exports = function (cache_dir, fetch_code) {
         console.log(`${err_text}\n\n${expected_dir}`)
         console.log('^^'.repeat(55))
         print("🤮 disk invalid cache_dir")
-        throw expected_dir
+        throw new Error(expected_dir)
     }
 
     let disk_fetch = (file) => new Promise((resolve, _reject) => {
@@ -71,8 +71,8 @@ module.exports = function (cache_dir, fetch_code) {
                 // file not found on disk, so we are resolving a cached dependency path, not local.
                 if (!filename.startsWith(cache_dir)) {
                     print('🤮 disk invalid filepath for cached dependency')
-                    throw `Error in ${path.basename(__filename)}: Invalid cache directory for file: ${filename}.
-                    Expected to start with [${cache_dir}]`
+                    throw new Error(`Invalid cache directory for file: ${filename}.
+                    Expected to start with [${cache_dir}]`)
                 }
 
                 return fetch_code(dependency).then((val) => disk_add(filename, val))
