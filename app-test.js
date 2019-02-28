@@ -18,21 +18,20 @@
         (result_hello) => assert(result_hello, 'Hello, forest!'))
 
     // local - nested
-    let multiply = ff('./tests/external-setup/multiply.js')
-    let result_twelve = await multiply(3, 4)
-    let test_local_nested = test("local function ffetches and computes as expected",
-        () => assert(result_twelve, 12))
+    let test_local_nested = await test_async("local function ffetches and computes as expected",
+        ff('./tests/external-setup/multiply.js')(3, 4),
+        (twelve) => assert(twelve, 12))
 
     // url
-    let add = ff('https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/59fdf8c2031d2418539adb98dfad73fcd1469acd/add.js')
-    let result_fifty = await add(34, 16)
-    let test_url = test("remote function ffetches and computes as expected",
-        () => assert(result_fifty, 50))
+    let add_url = 'https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/59fdf8c2031d2418539adb98dfad73fcd1469acd/add.js'
+    let test_url = await test_async("remote function ffetches and computes as expected",
+        ff(add_url)(34, 16),
+        (fifty) => assert(fifty, 50))
 
     // injection
-    let test_test = await ff('./tests/external-setup/test-test.js')(test_framework)
-    let test_injection = test("test framework can be injected into functions",
-        () => assert_test(test_test))
+    let test_injection = await test_async("test framework can be injected into functions",
+        ff('./tests/external-setup/test-test.js')(test_framework),
+        (test_test) => assert_test(test_test))
 
     // scope (access to outer still possible)
     let _outer_val = 1 || /* prevent linter suggestion */ _outer_val
