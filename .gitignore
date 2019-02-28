@@ -1,2 +1,4 @@
 # remote functions saved to disk
 shelf/
+# pretty-print file to inspect json
+dev-utils/temp.json
