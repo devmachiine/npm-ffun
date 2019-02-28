@@ -7,16 +7,15 @@
 
     let ff = require('./ffetch')()
     let test_framework = {
-        test, assert, display_message, tally_results, assert_test
+        test, test_async, assert, display_message, tally_results, assert_test
     } = require('./dev-utils/test-framework')
 
     /* Test basics */
 
     // local - root
-    let greeting = ff('./hello-fetch.js')
-    let result_hello = await greeting('forest')
-    let test_local_root = test("local function ffetches and computes as expected",
-        () => assert(result_hello, 'Hello, forest!'))
+    let test_local_root = await test_async("local function ffetches and computes as expected",
+        ff('./hello-fetch.js')('forest'),
+        (result_hello) => assert(result_hello, 'Hello, forest!'))
 
     // local - nested
     let multiply = ff('./tests/external-setup/multiply.js')
@@ -41,7 +40,14 @@
     let test_scope = test("function scope initialy set to ffetched code",
         () => assert_test(outer_accesed, 'ReferenceError: _outer_val is not defined'))
 
-    let basic_results = tally_results(test_local_root, test_local_nested, test_url, test_injection, test_scope)
+    // path startswith ./
+    let test_ff_expects_dotslash_path =
+        await test_async("non-https:// path expects to start with './'",
+            test_async("ff without ./", ff('hello-fetch.js')('forest'), () => _na),
+            (result) => assert(!!result.error, true))
+
+    let basic_results = tally_results(test_local_root, test_local_nested, test_url,
+        test_injection, test_scope, test_ff_expects_dotslash_path)
     let { overview: basic_result, error_messages: basic_errors } = basic_results
     print(`Basic ${basic_result}\n${basic_errors}`)
 
