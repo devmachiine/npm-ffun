@@ -1,6 +1,7 @@
 (async () => {
 
-    // Setup
+    /*  Setup */
+
     let print = console.log
     print('_'.repeat(65))
     let start_time = new Date().getTime();
@@ -9,14 +10,6 @@
     let test_framework = {
         test, test_async, assert, display_message, tally_results, assert_test
     } = require('./dev-utils/test-framework')
-
-    /* Most important test :) */
-
-    let test_nb = await test_async("local root function ffetches and works",
-        ff('https://raw.githubusercontent.com/devmachiine/ffetch-test/master/demo-functions/math/square.js')(5),
-        (twenty_five) => {
-            assert(twenty_five, 25)
-        })
 
     /* Test basics */
 
@@ -27,11 +20,11 @@
             (result_hello) => assert(result_hello, 'Hello, forest!'))
 
         , test_async("local simple arrow expected to fail (but works @ 2019.3.2)",
-            ff('./tests/external-setup/arrow-only.ts1128')(),
+            ff('./tests/external/arrow-only.ts1128')(),
             (result_hello) => assert(result_hello, 'not recommended to ommit variable or ()'))
 
         , test_async("local nested function ffetches and works",
-            ff('./tests/external-setup/math/multiply.js')(3, 4),
+            ff('./tests/external/math/multiply.js')(3, 4),
             (twelve) => assert(twelve, 12))
 
         , test_async("url path ffetches remote function",
@@ -39,11 +32,11 @@
             (fifty) => assert(fifty, 50))
 
         , test_async("test framework can be injected into functions",
-            ff('./tests/external-setup/test-test.js')(test_framework),
+            ff('./tests/external/test-test.js')(test_framework),
             (test_test) => assert_test(test_test))
 
         , test_async("function scope initialy set to ffetched code",
-            ff('./tests/external-setup/test-scope.js')(test_framework),
+            ff('./tests/external/test-scope.js')(test_framework),
             (result) => assert(result.error, 'ReferenceError: print is not defined'))
 
         , test_async("non-url path expects to start with './'",
@@ -67,7 +60,7 @@
             .filter(path => path.endsWith('.js'))
             .map(test_path => ff(test_path)(test, assert)))
 
-    let extra_results = tally_results(test_nb, ...extra_tests)
+    let extra_results = tally_results(...extra_tests)
     let { overview: extra_o, error_messages: extra_e } = extra_results
     print(`Extra ${extra_o}\n${extra_e}`)
 
@@ -81,8 +74,12 @@
 
     // todo:
     // [x] test arrow-only.js
+
+    // Test  injection behavior
     // [ ] create test regarding injection without explicit binding on function input (see test-scope.js)
     // [ ] move test-test to it's own test (out of injection test), and update to use result_text(test)
+    // [ ] injection ~ ommit injected function is ok, but replacing it in unexpected order breaks.
+
     // [ ] Scope insecure test -> prove tat access to outer still possible regardless of injection
     // [x] change all throw to throw new Error to get stacktrace
     // [ ] change all throw/catch to result type (if re-use simple)

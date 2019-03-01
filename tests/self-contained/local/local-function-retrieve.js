@@ -1,5 +1,5 @@
 (test, assert) => {
-    let factorial = ff('./tests/external-setup/factorial-hof-output.js')
+    let factorial = ff('./tests/external/factorial-hof-output.js')
 
     let await_and_call = (await factorial())(3)
 
