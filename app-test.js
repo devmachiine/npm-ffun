@@ -22,10 +22,9 @@
         ff('./tests/external-setup/multiply.js')(3, 4),
         (twelve) => assert(twelve, 12))
 
-    // url
-    let add_url = 'https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/59fdf8c2031d2418539adb98dfad73fcd1469acd/add.js'
-    let test_url = await test_async("remote function ffetches and computes as expected",
-        ff(add_url)(34, 16),
+    // url 
+    let test_url = await test_async("remote function ffetches from url path",
+        ff('https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/59fdf8c2031d2418539adb98dfad73fcd1469acd/add.js')(34, 16),
         (fifty) => assert(fifty, 50))
 
     // injection
@@ -34,10 +33,9 @@
         (test_test) => assert_test(test_test))
 
     // scope (access to outer still possible)
-    let _outer_val = 1 || /* prevent linter suggestion */ _outer_val
-    let outer_accesed = await ff('./tests/external-setup/test-scope.js')(test_framework)
-    let test_scope = test("function scope initialy set to ffetched code",
-        () => assert_test(outer_accesed, 'ReferenceError: _outer_val is not defined'))
+    let test_scope = await test_async("function scope initialy set to ffetched code",
+        ff('./tests/external-setup/test-scope.js')(test_framework),
+        (result) => assert(result.error, 'ReferenceError: print is not defined'))
 
     // path startswith ./
     let test_ff_expects_dotslash_path =
@@ -67,12 +65,15 @@
     // [x] local load remote
     // [x] remote load remote
     // [ ] remote load relative
+    // [ ] pass ff func to ff func
+    // [ ] require available in ff (shouldn't it be? unless it's called _.njs?)
 
     // [x] change all throw to throw new Error to get stacktrace
     // [ ] change all throw/catch to result type (if re-use simple)
     // [ ] test coverage
     // [ ] maybe - dependency upgrade, or signal ~ if it's to be part of this POC.
     // [ ] maybe *explicitly not* local load relative
+    // [ ] far maybe *not* ff_local to access local function (DI)
 
     let end = new Date().getTime();
     let time = end - start_time;
