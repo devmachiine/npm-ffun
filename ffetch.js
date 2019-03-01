@@ -46,30 +46,20 @@ module.exports = function (fetch_code, root_dir) {
         return dependency
     }
 
-    // todo - is this disk abstraction bleed that could be handled in disk.js ?
     let local_resolve = (dependency) => {
 
-        if(dependency.startsWith(root_dir)){
+        if (dependency.startsWith(root_dir)) {
             return dependency
         }
 
-        // only resolve names from root source ./ ~or~ full_path 
-        if (!dependency.startsWith('./')) {
+        // Only resolve names from full_path. ~or~ root app source ./
+        // Relative outside of root and sharing files across projects shortens feedback loop.
+        if (dependency.startsWith('./')) {
+            return path.join(root_dir, dependency)
+        } else {
             print("🤮 ffetch invalid dep")
             throw new Error(`missing './' --> required ffetch('./[path]'), but received ffetch(['${dependency}'])`)
         }
-
-        let full_path = (file) =>
-            file.includes(root_dir) ? file
-                : path.join(root_dir, file)
-
-        // .startsWith('./')
-
-        let target = full_path(dependency)
-
-        print('relative dependency changed to: ' + target)
-
-        return target
     }
 
     // Traverse/Root relative reference should be the same for web and local references.

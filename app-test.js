@@ -74,13 +74,12 @@
     // [x] test arrow-only.js
     // [ ] create test regarding injection without explicit binding on function input (see test-scope.js)
     // [ ] move test-test to it's own test (out of injection test), and update to use result_text(test)
-    // [ ] Scope test: (access to outer still possible regardless of injection)
+    // [ ] Scope insecure test -> prove tat access to outer still possible regardless of injection
     // [x] change all throw to throw new Error to get stacktrace
     // [ ] change all throw/catch to result type (if re-use simple)
     // [ ] test coverage
-    // [ ] maybe - dependency upgrade, or signal ~ if it's to be part of this POC.
-    // [ ] maybe *explicitly not* local load relative
     // [ ] far maybe *not* ff_local to access local function (DI)
+    // [ ] maybe - dependency upgrade, or signal ~ if it's to be part of this POC.
 
     let end = new Date().getTime();
     let time = end - start_time;
