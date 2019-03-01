@@ -23,7 +23,7 @@
             (result_hello) => assert(result_hello, 'not recommended to ommit variable or ()'))
 
         , test_async("local nested function ffetches and works",
-            ff('./tests/external-setup/multiply.js')(3, 4),
+            ff('./tests/external-setup/math/multiply.js')(3, 4),
             (twelve) => assert(twelve, 12))
 
         , test_async("url path ffetches remote function",

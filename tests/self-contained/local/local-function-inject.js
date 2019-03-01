@@ -1,7 +1,7 @@
 (test, assert) => {
     let factorial = ff('./tests/external-setup/factorial-hof-input.js')
 
-    let multiply = ff('./tests/external-setup/multiply.js')
+    let multiply = ff('./tests/external-setup/math/multiply.js')
 
     let twenty_four = await factorial(4, multiply)
 
