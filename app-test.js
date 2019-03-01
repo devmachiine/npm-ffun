@@ -68,6 +68,8 @@
     // [ ] pass ff func to ff func
     // [ ] require available in ff (shouldn't it be? unless it's called _.njs?)
 
+    // todo:
+    // [ ] create test regarding injection without explicit binding on function input (see test-scope.js)
     // [x] change all throw to throw new Error to get stacktrace
     // [ ] change all throw/catch to result type (if re-use simple)
     // [ ] test coverage
