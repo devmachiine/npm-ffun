@@ -26,23 +26,31 @@ module.exports = function (fetch_code, root_dir) {
         throw new Error('require(ff)(directory-string || dependency-resolver-function')
     }
 
-    // todo: use ./ in http as domain root to resolve dependency path
-    // example
-    // https://raw.githubusercontent.com/username/project/branch/folder/folder2/some.js
-    //
-    // Root relative
-    // has reference to [./foo/bar.js], and is found in:
-    // https://raw.githubusercontent.com/foo/bar.js
-
-    let web_resolve = (dependency) => {
-        // TODO to find relative path code as it was, instad of currently always dynamic resolver.
-        // write 'treewalkers'
-        // eg for github, it has https..github..commit..code
-        //     relative-> with ..path..[code as it was found at same root commit time]
-        // eg for own api's, a standard like
-        //                https..url../[timestamp]/..paths../...code
-        //     relative -> with (same-url-root)[same timestamp]../..paths../..code
+    let web_resolve = (dependency, parent_path) => {
         print('web_resolve dependency : ' + dependency)
+
+        if (dependency.startsWith('./')) {
+
+            // todo regex to remove filenames in dep_path & par_path
+            // todo doc root-relativity (this code in enlish)
+
+            let dep_path = path.dirname(dependency.replace("./", ""))
+            print('🍌 dep_path: ' + dep_path)
+
+            let par_path = path.dirname(parent_path.replace('https://', ''))
+            print('🦍 par_path: ' + par_path)
+
+            let cut_index = par_path.lastIndexOf(dep_path)
+
+            let domain_and_subpath = par_path.substring(0, cut_index)
+
+            let target = 'https://' + domain_and_subpath + dependency.replace('./', '')
+
+            print('tttttaaarget! ' + target)
+
+            return target
+        }
+
         return dependency
     }
 
@@ -67,11 +75,11 @@ module.exports = function (fetch_code, root_dir) {
     // todo find path for relative named functions
     // ex: function on example.com/funcAbc calls function (./function2)
     //     then (/.function2) is resolved to example.com/demo2/etc5xyz.js
-    let resolve_name = (dependency) => {
+    let resolve_name = (dependency, parent_path) => {
         print('⚡ ffetch.resolve_name = ' + dependency)
 
-        if (dependency.startsWith(`https://`)) {
-            return web_resolve(dependency)
+        if (dependency.startsWith(`https://`) || (parent_path && parent_path.startsWith(`https://`))) {
+            return web_resolve(dependency, parent_path)
         }
 
         if (typeof ffetch_path !== "undefined") {
@@ -90,38 +98,37 @@ module.exports = function (fetch_code, root_dir) {
         }
     }
 
-    let build = (code, context, ffetch_path) => {
+    let build = (code, context, resource) => {
         // print('build - code: ' + code.length + ' loc')
         // print('build - context: ' + context)
 
-        let fb = (() => {
-            this.ffetch_path = ffetch_path
-            return context
-        })()
+        let ff$ = parent_path => resource_path => context(resource_path, parent_path)
 
         // todo better error messages for incorrect code, eg:
         // empty or comment-only code gives -> async is not defined
         // code that doesn't start with expression gives -> SyntaxError: Unexpected token (
 
-        let fun = (new Function(`return ((ff) => (async ${code}\n))`))()(fb);
+        // let fun = (new Function(`return ((ff) => (async ${code}\n))`))()(context);
+        let fun = (new Function(`return ((ff) => (async ${code}\n))`))()(ff$(resource));
 
         return fun
     }
 
-    let fetch_and_build = (resourcePath) => (...funcArgs) =>
+    let fetch_and_build = (resource_path, parent_path) => (...funcArgs) =>
         (async () => {
             try {
                 if (typeof ff !== "undefined")
                     print('fetch_and_build.ff = ' + ff)
 
-                if (typeof ffetch_path !== "undefined") {
-                    print('fetch_and_build.ffetch_path = ' + ffetch_path)
+                if (typeof parent_path !== "undefined") {
+                    print('fetch_and_build.parent_path = ' + parent_path)
+                    print('xo'.repeat(50))
                 } else {
-                    print('in fetch_and_build, no ffetch_path, too late to set initial root?')
+                    print('ffetch.fetch_and_build, undefined parent_function')
                 }
 
                 print('f&b')
-                let resource = await resolve_name(resourcePath)
+                let resource = await resolve_name(resource_path, parent_path)
                 print('f&b.resource = ' + resource)
                 let code = '' + await fetch_code(resource)
                 print('f&b.code = ' + code.length)
@@ -134,7 +141,7 @@ module.exports = function (fetch_code, root_dir) {
                 print(`🎣 ffetch oops: [${oops}]\n${JSON.stringify(oops)}`)
                 // todo return result type? { code: .. (or undefined), author, timestamp, hash }
                 print('🤮 rethrow ffetch oops')
-                throw new Error(`ffetch error ${resourcePath} with args (${funcArgs}) --> ${oops}`)
+                throw new Error(`ffetch error ${resource_path} with args (${funcArgs}) --> ${oops}`)
             }
         })()
 

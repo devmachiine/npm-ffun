@@ -10,6 +10,14 @@
         test, test_async, assert, display_message, tally_results, assert_test
     } = require('./dev-utils/test-framework')
 
+    /* Most important test :) */
+
+    let test_nb = await test_async("local root function ffetches and works",
+        ff('https://raw.githubusercontent.com/devmachiine/ffetch-test/master/demo-functions/math/square.js')(5),
+        (twenty_five) => {
+            assert(twenty_five, 25)
+        })
+
     /* Test basics */
 
     let basic_tests = [
@@ -56,9 +64,10 @@
 
     let extra_tests = await Promise.all(
         directory_files('./tests/self-contained/')
+            .filter(path => path.endsWith('.js'))
             .map(test_path => ff(test_path)(test, assert)))
 
-    let extra_results = tally_results(...extra_tests)
+    let extra_results = tally_results(test_nb, ...extra_tests)
     let { overview: extra_o, error_messages: extra_e } = extra_results
     print(`Extra ${extra_o}\n${extra_e}`)
 
@@ -66,8 +75,8 @@
     // [x] local load local
     // [x] local load remote
     // [x] remote load remote
-    // [ ] remote load relative
-    // [ ] pass ff func to ff func
+    // [x] remote load relative
+    // [x] pass ff func to ff func
     // [ ] require available in ff (shouldn't it be? unless it's called _.njs?)
 
     // todo:
@@ -86,6 +95,6 @@
     print(`Completed in ~ ${time} ms`)
     print('_'.repeat(65))
 })().catch(err => {
-    console.log('🎣 app-test err!\n')
+    console.log('🎣 🦖 app-test err!\n')
     console.log(err.stack ? err.stack : '' + err)
 })

@@ -5,11 +5,11 @@
     let twenty_five = await add(5, 20)
 
     // ff that itself calls ff  
-    let square = ff('./tests/external-setup/math/square.js')
-    let sixty_four = await square(8)
+    let cube = ff('./tests/external-setup/math/cube.js')
+    let thousand = await cube(10)
 
     return test('local functions can load other local functions', () => {
         assert(twenty_five, 25)
-        assert(sixty_four, 64)
+        assert(thousand, 1000)
     })
 }
