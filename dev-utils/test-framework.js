@@ -67,6 +67,9 @@ let tally_results = (...results) => {
         if (result.error) {
             error_messages += result_text(result)
             err_tests++
+        } else if (!result.description) {
+            error_messages += `\nNot a test result: ${result} ${JSON.stringify(result)}`
+            err_tests++
         }
         else ok_tests++
     })
