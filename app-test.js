@@ -12,41 +12,39 @@
 
     /* Test basics */
 
-    // local - root
-    let test_local_root = await test_async("local function ffetches and computes as expected",
-        ff('./hello-fetch.js')('forest'),
-        (result_hello) => assert(result_hello, 'Hello, forest!'))
+    let basic_tests = [
 
-    // local - nested
-    let test_local_nested = await test_async("local function ffetches and computes as expected",
-        ff('./tests/external-setup/multiply.js')(3, 4),
-        (twelve) => assert(twelve, 12))
+        test_async("local root function ffetches and works",
+            ff('./hello-fetch.js')('forest'),
+            (result_hello) => assert(result_hello, 'Hello, forest!'))
 
-    // url 
-    let test_url = await test_async("remote function ffetches from url path",
-        ff('https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/59fdf8c2031d2418539adb98dfad73fcd1469acd/add.js')(34, 16),
-        (fifty) => assert(fifty, 50))
+        , test_async("local nested function ffetches and works",
+            ff('./tests/external-setup/multiply.js')(3, 4),
+            (twelve) => assert(twelve, 12))
 
-    // injection
-    let test_injection = await test_async("test framework can be injected into functions",
-        ff('./tests/external-setup/test-test.js')(test_framework),
-        (test_test) => assert_test(test_test))
+        , test_async("url path ffetches remote function",
+            ff('https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/59fdf8c2031d2418539adb98dfad73fcd1469acd/add.js')(34, 16),
+            (fifty) => assert(fifty, 50))
 
-    // scope (access to outer still possible)
-    let test_scope = await test_async("function scope initialy set to ffetched code",
-        ff('./tests/external-setup/test-scope.js')(test_framework),
-        (result) => assert(result.error, 'ReferenceError: print is not defined'))
+        , test_async("test framework can be injected into functions",
+            ff('./tests/external-setup/test-test.js')(test_framework),
+            (test_test) => assert_test(test_test))
 
-    // path startswith ./
-    let test_ff_expects_dotslash_path =
-        await test_async("non-https:// path expects to start with './'",
+        , test_async("function scope initialy set to ffetched code",
+            ff('./tests/external-setup/test-scope.js')(test_framework),
+            (result) => assert(result.error, 'ReferenceError: print is not defined'))
+
+        , test_async("non-url path expects to start with './'",
             test_async("ff without ./", ff('hello-fetch.js')('forest'), () => _na),
             (result) => assert(!!result.error, true))
+    ]
 
-    let basic_results = tally_results(test_local_root, test_local_nested, test_url,
-        test_injection, test_scope, test_ff_expects_dotslash_path)
-    let { overview: basic_result, error_messages: basic_errors } = basic_results
-    print(`Basic ${basic_result}\n${basic_errors}`)
+    let completed_basic = await Promise.all(basic_tests)
+
+    let basic_results = tally_results(...completed_basic)
+
+    let { overview: basic_o, error_messages: basic_e } = basic_results
+    print(`Basic ${basic_o}\n${basic_e}`)
 
     /* Test behaviour from within a ffetched function */
 
@@ -57,8 +55,8 @@
             .map(test_path => ff(test_path)(test, assert)))
 
     let extra_results = tally_results(...extra_tests)
-    let { overview: extended_result, error_messages: extended_errors } = extra_results
-    print(`Extra ${extended_result}\n${extended_errors}`)
+    let { overview: extra_o, error_messages: extra_e } = extra_results
+    print(`Extra ${extra_o}\n${extra_e}`)
 
     // pending tests:
     // [x] local load local
@@ -69,7 +67,10 @@
     // [ ] require available in ff (shouldn't it be? unless it's called _.njs?)
 
     // todo:
+    // [ ] test arrow-only.js
     // [ ] create test regarding injection without explicit binding on function input (see test-scope.js)
+    // [ ] move test-test to it's own test (out of injection test), and update to use result_text(test)
+    // [ ] Scope test: (access to outer still possible regardless of injection)
     // [x] change all throw to throw new Error to get stacktrace
     // [ ] change all throw/catch to result type (if re-use simple)
     // [ ] test coverage
