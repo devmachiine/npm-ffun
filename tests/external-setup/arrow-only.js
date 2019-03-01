@@ -1,2 +1,0 @@
-_ts1128 => 'even just an arrow yielding a value is fine, as it gets converted into (async => even just an arrow...)'
-// _ts1128 before the arrow above could be removed and the function could still work.

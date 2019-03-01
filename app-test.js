@@ -18,6 +18,10 @@
             ff('./hello-fetch.js')('forest'),
             (result_hello) => assert(result_hello, 'Hello, forest!'))
 
+        , test_async("local simple arrow expected to fail (but works @ 2019.3.2)",
+            ff('./tests/external-setup/arrow-only.ts1128')(),
+            (result_hello) => assert(result_hello, 'not recommended to ommit variable or ()'))
+
         , test_async("local nested function ffetches and works",
             ff('./tests/external-setup/multiply.js')(3, 4),
             (twelve) => assert(twelve, 12))
@@ -67,7 +71,7 @@
     // [ ] require available in ff (shouldn't it be? unless it's called _.njs?)
 
     // todo:
-    // [ ] test arrow-only.js
+    // [x] test arrow-only.js
     // [ ] create test regarding injection without explicit binding on function input (see test-scope.js)
     // [ ] move test-test to it's own test (out of injection test), and update to use result_text(test)
     // [ ] Scope test: (access to outer still possible regardless of injection)
