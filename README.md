@@ -76,7 +76,7 @@ Takes single function, that returns source code for a given path or url, and ret
 
 If the first argument isn't a directory name, it expects a dependency-resolver-function:
 
-A function that searches an in-memory cache for a function, otherwise it checks the disk _(eg `./shelf`)_ to find the code, and otherwise fetches the data from the web. The disk and memory caches are subsequently updated to cache values as they are retrieved from lower levels.
+A function that retrieves and builds a function from the web, and caches it both on disk _(eg `./nano_modules` folder)_ and in memory for subsequent requests.
 
-Each function saved on disk is saved in it's own file, similar to the remote dependency drawn from the web. If multiple remote functions were saved in the same file(s) instead, they would cause many changes in those files over the life of a project (git history), and make remote dependency resolution for those functions substantially more difficult to track and manage effectively.
+Each function saved on disk is saved in it's own file, exactly like the remote dependency drawn from the web. If multiple remote functions were saved in the same file(s) instead, they would cause many changes in those files over the life of a project (git history), and make remote dependency resolution for those functions substantially more difficult to track and manage effectively.
 --> 

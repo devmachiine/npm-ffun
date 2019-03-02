@@ -9,7 +9,7 @@ module.exports = function (fetch_code, root_dir) {
     root_dir = root_dir || path.dirname(require.main.filename)
 
     if (typeof fetch_code === 'undefined') {
-        let default_cache_dir = path.join(root_dir, './shelf')
+        let default_cache_dir = path.join(root_dir, './nano_modules')
         let fs = require('fs')
         if (!fs.existsSync(default_cache_dir)) {
             console.log('>> default cache dir created in app root: ' + default_cache_dir)
