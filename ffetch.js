@@ -31,26 +31,25 @@ module.exports = function (fetch_code, root_dir) {
 
         if (dependency.startsWith('./')) {
 
-            // todo regex to remove filenames in dep_path & par_path
             // todo doc root-relativity (this code in enlish)
-            print('le dep: ' + dependency)
-            print('le par:' + parent_path)
 
-            let dep_path = path.dirname(dependency.replace("./", ""))
-            print('🍌 dep_path: ' + dep_path)
+            print('🍌 dependency: ' + dependency)
+            // --> ./demo-functions/math/multiply.js
+            print('🦍 parent_path:' + parent_path)
+            // --> https://raw.githubusercontent.com/devmachiine/ffetch-test/master/demo-functions/math/multiply.js
 
-            let par_path = path.dirname(parent_path.replace('https://', ''))
-            print('🦍 par_path: ' + par_path)
-
-            let cut_index = par_path.lastIndexOf(dep_path)
-
-            let domain_and_subpath = par_path.substring(0, cut_index)
-
-            let target = 'https://' + domain_and_subpath + dependency.replace('./', '')
-
-            print('tttttaaarget! ' + target)
-
-            return target
+            let dep_sub_path = dependency.replace('.', '')
+            // --> /demo-functions/math/multiply.js
+            let dep_trim_filename = dep_sub_path.substring(0, dep_sub_path.lastIndexOf('/'))
+            // --> /demo-functions/math
+            let par_trim_filename = parent_path.substring(0, parent_path.lastIndexOf('/'))
+            // --> https://raw.githubusercontent.com/devmachiine/ffetch-test/master/demo-functions/math
+            let par_root = par_trim_filename.substring(0, par_trim_filename.lastIndexOf(dep_trim_filename))
+            // -->  https://raw.githubusercontent.com/devmachiine/ffetch-test/master
+            let relative_web_dependency = par_root + dep_sub_path
+            // --> https://raw.githubusercontent.com/devmachiine/ffetch-test/master/demo-functions/math/multiply.js
+            print ('tttttaaarget ->>' + relative_web_dependency)
+            return relative_web_dependency
         }
 
         return dependency
