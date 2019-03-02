@@ -87,6 +87,9 @@
     // [ ] far maybe *not* ff_local to access local function (DI)
     // [ ] maybe - dependency upgrade, or signal ~ if it's to be part of this POC.
 
+    // tests
+    // [ ] root-relativity behavior
+
     let end = new Date().getTime();
     let time = end - start_time;
     print(`Completed in ~ ${time} ms`)

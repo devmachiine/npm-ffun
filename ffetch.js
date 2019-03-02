@@ -31,28 +31,30 @@ module.exports = function (fetch_code, root_dir) {
 
         if (dependency.startsWith('./')) {
 
-            // todo doc root-relativity (this code in enlish)
-
             print('🍌 dependency: ' + dependency)
-            // --> ./demo-functions/math/multiply.js
             print('🦍 parent_path:' + parent_path)
-            // --> https://raw.githubusercontent.com/devmachiine/ffetch-test/master/demo-functions/math/multiply.js
+
+            // dependency          -->                    ./c/d/multiply.js
+            // parent_path         --> https://demo.com/a/b/c/d/square.js
+            // dep_sub_path        -->                     /c/d/multiply.js
+            // dep_trim_filename   -->                     /c/d
+            // par_trim_filename   --> https://demo.com/a/b/c/d
+            // par_root            --> https://demo.com/a/b
+            // relative_dependency --> https://demo.com/a/b/c/d/square.js
 
             let dep_sub_path = dependency.replace('.', '')
-            // --> /demo-functions/math/multiply.js
-            let dep_trim_filename = dep_sub_path.substring(0, dep_sub_path.lastIndexOf('/'))
-            // --> /demo-functions/math
-            let par_trim_filename = parent_path.substring(0, parent_path.lastIndexOf('/'))
-            // --> https://raw.githubusercontent.com/devmachiine/ffetch-test/master/demo-functions/math
-            let par_root = par_trim_filename.substring(0, par_trim_filename.lastIndexOf(dep_trim_filename))
-            // -->  https://raw.githubusercontent.com/devmachiine/ffetch-test/master
-            let relative_web_dependency = par_root + dep_sub_path
-            // --> https://raw.githubusercontent.com/devmachiine/ffetch-test/master/demo-functions/math/multiply.js
-            print ('tttttaaarget ->>' + relative_web_dependency)
-            return relative_web_dependency
-        }
 
-        return dependency
+            let dep_trim_filename = dep_sub_path.substring(0, dep_sub_path.lastIndexOf('/'))
+            let par_trim_filename = parent_path.substring(0, parent_path.lastIndexOf('/'))
+            let par_root = par_trim_filename.substring(0, par_trim_filename.lastIndexOf(dep_trim_filename))
+
+            let relative_dependency = par_root + dep_sub_path
+
+            print('tttttaaarget ->>' + relative_dependency)
+            return relative_dependency
+        } else {
+            return dependency
+        }
     }
 
     let local_resolve = (dependency) => {
