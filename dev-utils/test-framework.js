@@ -52,7 +52,13 @@ const result_text = test_result => {
     return `${short_message}${postfix_stack}`
 }
 
-let tally_results = (...results) => {
+let tally_results = (name, ...results) => {
+    if (typeof name !== 'string') {
+        results.unshift(name)
+        name = ''
+    } else {
+        name += " "
+    }
     let ok_tests = 0, err_tests = 0, error_messages = ''
     results.forEach(result => {
         if (result.error) {
@@ -66,7 +72,7 @@ let tally_results = (...results) => {
     })
     let ss = n => n > 1 ? 's' : ''
     let overview = `${ok_tests} test${ss(ok_tests)} [ok] ${err_tests > 0 ? `..and ${err_tests} [error${ss(err_tests)}] ⚔️🔥` : '🌼'}`
-    return { overview, error_messages }
+    return `${name}${overview}\n${error_messages}`
 }
 
 module.exports = { assert, test, test_async, display_message, tally_results };

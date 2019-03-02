@@ -49,10 +49,7 @@
 
     let completed_basic = await Promise.all(basic_tests)
 
-    let basic_results = tally_results(...completed_basic)
-
-    let { overview: basic_o, error_messages: basic_e } = basic_results
-    print(`Basic ${basic_o}\n${basic_e}`)
+    print(tally_results('Basic', ...completed_basic))
 
     /* Test behaviour from within a ffetched function */
 
@@ -63,9 +60,7 @@
             .filter(path => path.endsWith('.js'))
             .map(test_path => ff(test_path)(test, assert)))
 
-    let extra_results = tally_results(...extra_tests)
-    let { overview: extra_o, error_messages: extra_e } = extra_results
-    print(`Extra ${extra_o}\n${extra_e}`)
+    print(tally_results('Extra', ...extra_tests))
 
     // pending tests:
     // [x] local load local
@@ -77,7 +72,6 @@
 
     // Test  injection behavior
     // [ ] create test regarding injection without explicit binding on function input (see test-scope.js)
-    // [ ] move test-test to it's own test (out of injection test), and update to use result_text(test)
     // [ ] injection ~ ommit injected function is ok, but replacing it in unexpected order breaks.
 
     // [ ] Scope insecure test -> prove tat access to outer still possible regardless of injection
