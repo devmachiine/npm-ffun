@@ -8,7 +8,7 @@
 
     let ff = require('./ffetch')()
     let test_framework = {
-        test, test_async, assert, display_message, tally_results, assert_test
+        test, test_async, assert, display_message, tally_results
     } = require('./dev-utils/test-framework')
 
     /* Test basics */
@@ -33,7 +33,10 @@
 
         , test_async("test framework can be injected into functions",
             ff('./tests/external/test-test.js')(test_framework),
-            (test_test) => assert_test(test_test))
+            (test_result) => {
+                if (test_result.error) { throw test_result.error }
+                assert(test_result.description, 'test functions yield expected results')
+            })
 
         , test_async("function scope initialy set to ffetched code",
             ff('./tests/external/test-scope.js')(test_framework),
@@ -72,9 +75,6 @@
     // [x] pass ff func to ff func
     // [ ] require available in ff (shouldn't it be? unless it's called _.njs?)
 
-    // todo:
-    // [x] test arrow-only.js
-
     // Test  injection behavior
     // [ ] create test regarding injection without explicit binding on function input (see test-scope.js)
     // [ ] move test-test to it's own test (out of injection test), and update to use result_text(test)
@@ -83,8 +83,8 @@
     // [ ] Scope insecure test -> prove tat access to outer still possible regardless of injection
     // [x] change all throw to throw new Error to get stacktrace
     // [ ] change all throw/catch to result type (if re-use simple)
-    // [ ] test coverage
-    // [ ] far maybe *not* ff_local to access local function (DI)
+
+    // fforest.
     // [ ] maybe - dependency upgrade, or signal ~ if it's to be part of this POC.
 
     // tests

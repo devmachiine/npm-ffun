@@ -52,15 +52,6 @@ const result_text = test_result => {
     return `${short_message}${postfix_stack}`
 }
 
-const assert_test = (result, error_message) => {
-    if (result.error != error_message) {
-        let err = !error_message ? result.error :
-            `test did not fail as expected. ${result.error ?
-                `[${error_message}] === [${result.error}]` : 'No errors.'}`
-        throw `\n [x] ${result.description}\n      --> ${err}`
-    }
-}
-
 let tally_results = (...results) => {
     let ok_tests = 0, err_tests = 0, error_messages = ''
     results.forEach(result => {
@@ -78,5 +69,5 @@ let tally_results = (...results) => {
     return { overview, error_messages }
 }
 
-module.exports = { assert, test, test_async, display_message, tally_results, assert_test };
+module.exports = { assert, test, test_async, display_message, tally_results };
 
