@@ -23,7 +23,7 @@ module.exports = function (fetch_code, root_dir) {
     }
     else if (typeof fetch_code !== "function") {
         print('🤮 ffetch init')
-        throw new Error('require(ff)(directory-string || dependency-resolver-function')
+        throw new Error('require(ff)(directory-string || dependency-fetch-function')
     }
 
     let web_resolve = (dependency, parent_path) => {

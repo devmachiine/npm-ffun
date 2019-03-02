@@ -5,7 +5,7 @@ module.exports = function (cache_dir, fetch_code) {
 
     // const debug_mode = true
     const print = typeof debug_mode === 'undefined' ? () => 0 : console.log
-
+    
     if (!fs.existsSync(cache_dir)) {
         let full_dir = path.resolve(cache_dir)
         let err_text = `disk cache initialization error --> require('ffetch')(${cache_dir})\n\n`
@@ -22,6 +22,9 @@ module.exports = function (cache_dir, fetch_code) {
 
     let disk_fetch = (file) => new Promise((resolve, _reject) => {
         fs.readFile(file, (err, data) => resolve(err ? undefined : data))
+        // note ~ file is assumed to exist
+        // only on exceptional 1st attempt error returns undefined etc..
+        // todo restructure to clarify.
     })
 
     let disk_add = (file_path, value) => new Promise((resolve, reject) => {
@@ -34,6 +37,7 @@ module.exports = function (cache_dir, fetch_code) {
             resolve(value)
         }
         catch (err) {
+            // ~ // todo ~ test io, and retry/bypass ~
             print('🎣 err --> ' + err)
             reject(`Error in ${path.basename(__filename)}: ${err}`)
         }
@@ -65,7 +69,6 @@ module.exports = function (cache_dir, fetch_code) {
 
                 return Promise.resolve(disk_val)
             } else {
-                print('disk cache miss')
                 print('disk cache miss')
 
                 // file not found on disk, so we are resolving a cached dependency path, not local.

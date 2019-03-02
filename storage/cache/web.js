@@ -8,6 +8,9 @@ module.exports = function (https_url) {
                 data += chunk;
             });
             resp.on('end', () => resolve(data));
-        }).on("error", (err) => reject(err))
+        }).on("error", (err) => {
+            // ~ // todo ~ test io, and retry/bypass ~
+            reject(err)
+        })
     });
 }
