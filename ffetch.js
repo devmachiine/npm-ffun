@@ -96,7 +96,7 @@ module.exports = function (fetch_code, root_dir) {
             let fun = (new Function(`return ((ff) => (async ${code}\n))`))()(ff$(resource));
             return fun
         } catch (err) {
-            err.message = `Error building function [${resource}] --> ${err.message}`
+            err.message = `ffetch.build :: function error [${resource}] --> ${err.message}`
             print('🤮 rethrow build oops')
             throw err
         }
@@ -121,12 +121,12 @@ module.exports = function (fetch_code, root_dir) {
 
                 return func(...funcArgs)
 
-            } catch (oops) {
-                print(`🎣 ffetch oops: [${oops}]\n${JSON.stringify(oops)}`)
+            } catch (err) {
+                print(`🎣 ffetch error: [${err}]\n${JSON.stringify(err)}`)
                 // todo return result type? { code: .. (or undefined), author, timestamp, hash }
-                print('🤮 rethrow ffetch oops')
-                oops.message = `ffetch error ${resource_path} with args (${funcArgs}) --> ${oops.message}`
-                throw oops
+                print('🤮 rethrow ffetch error')
+                err.message = `ffetch error ${resource_path} with args (${funcArgs}) --> ${err.message}`
+                throw err
             }
         })()
 

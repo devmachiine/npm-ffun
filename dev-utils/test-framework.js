@@ -41,7 +41,7 @@ const test = (description, func) => {
     }
 }
 
-const test_async = (description, promise, func) => promise
+const test_async = (description, promise, func = x => x) => promise
     .then(result => result)
     .catch(err => {
         err.message = 'Promise rejected >> ' + err.message

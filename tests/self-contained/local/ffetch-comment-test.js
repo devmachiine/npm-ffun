@@ -10,7 +10,7 @@
 
     let expected_build_errors = [
         `ffetch error ./tests/external/error-test-comment.js with args ()`
-        , `--> Error building function`
+        , `ffetch.build :: function error`
         , `--> Unexpected token (`
     ]
 
@@ -20,7 +20,7 @@
 
             expected_build_errors.forEach(build_error => {
                 assert_fun(() => comments_error.message.includes(build_error),
-                    `test case { ${build_error} }`)
+                    `expected |${build_error}| within |${comments_error}|`)
             })
 
         })

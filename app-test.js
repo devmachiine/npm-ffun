@@ -45,16 +45,28 @@
         , test_async("non-url path expects to start with './'",
             test_async("ff without ./", ff('hello-fetch.js')('forest'), () => _na),
             (result) => assert(!!result.error, true))
+
+        , test_async("syntax error in ffetch function can be caught",
+            ff('./tests/external/error-syntax.js')().catch(err => { err.x = 'caught'; return err }),
+            (err) => assert(err.x, 'caught'))
+
+        , test_async("non existing function can be caught and ignored",
+            ff('./tests/doesnt-exist.js')().catch(err => err))
+
     ])
 
     /* Test behaviour from within a ffetched function */
 
     let directory_files = require('./dev-utils/directory-file-list')
 
+    let perform_test = (test_path) =>
+        ff(test_path)(test, assert, assert_fun)
+            .catch(err => { return { description: test_path, error: 'bzzk: ' + err } })
+
     let extra_tests = await Promise.all(
         directory_files('./tests/self-contained/')
             .filter(path => path.endsWith('.js'))
-            .map(test_path => ff(test_path)(test, assert, assert_fun)))
+            .map(perform_test))
 
     /* Print tests results */
 
@@ -78,18 +90,16 @@
 [x] remote load relative
 [x] pass ff func to ff func
 [ ] require available in ff (shouldn't it be? unless it's called _.njs?)
+[ ] root-relativity behavior (attach upstream then resolve downstream ~> search url from left, then build from right)
 
 Test  injection behavior
 [ ] create test regarding injection without explicit binding on function input (see test-scope.js)
 [ ] injection ~ ommit injected function is ok, but replacing it in unexpected order breaks.
 
 [ ] Scope insecure test -> prove tat access to outer still possible regardless of injection
-[ ] change all throw/catch to result type (if re-use simple)
+[ ] change all throw/catch to result type (if re-use simple ~ eg add .default_value(x => undefined) prototype to ff.)
 
 fforest.
 [ ] maybe - dependency upgrade, or signal ~ if it's to be part of this POC.
-
-tests
-[ ] root-relativity behavior
 
 */
