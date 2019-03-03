@@ -84,7 +84,6 @@ Test  injection behavior
 [ ] injection ~ ommit injected function is ok, but replacing it in unexpected order breaks.
 
 [ ] Scope insecure test -> prove tat access to outer still possible regardless of injection
-[x] change all throw to throw new Error to get stacktrace
 [ ] change all throw/catch to result type (if re-use simple)
 
 fforest.

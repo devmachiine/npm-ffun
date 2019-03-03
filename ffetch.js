@@ -92,9 +92,14 @@ module.exports = function (fetch_code, root_dir) {
         // empty or comment-only code gives -> async is not defined
         // code that doesn't start with expression gives -> SyntaxError: Unexpected token (
 
-        let fun = (new Function(`return ((ff) => (async ${code}\n))`))()(ff$(resource));
-
-        return fun
+        try {
+            let fun = (new Function(`return ((ff) => (async ${code}\n))`))()(ff$(resource));
+            return fun
+        } catch (err) {
+            err.message = `Error building function [${resource}] --> ${err.message}`
+            print('🤮 rethrow build oops')
+            throw err
+        }
     }
 
     let fetch_and_build = (resource_path, parent_path) => (...funcArgs) =>
@@ -120,7 +125,8 @@ module.exports = function (fetch_code, root_dir) {
                 print(`🎣 ffetch oops: [${oops}]\n${JSON.stringify(oops)}`)
                 // todo return result type? { code: .. (or undefined), author, timestamp, hash }
                 print('🤮 rethrow ffetch oops')
-                throw new Error(`ffetch error ${resource_path} with args (${funcArgs}) --> ${oops}`)
+                oops.message = `ffetch error ${resource_path} with args (${funcArgs}) --> ${oops.message}`
+                throw oops
             }
         })()
 
