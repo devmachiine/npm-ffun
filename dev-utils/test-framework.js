@@ -32,22 +32,28 @@ const error_result = (description, err) => {
     }
 }
 
-const test = (description, func) => {
+const test = (description, func, then_func = x => x) =>
+    typeof func === 'function' ?
+        test_direct(description, func, then_func)
+        : test_async(description, func, then_func)
+
+
+const test_direct = (description, func, then_func) => {
     try {
-        func()
+        then_func(func())
         return ok_result(description)
     } catch (err) {
         return error_result(description, err)
     }
 }
 
-const test_async = (description, promise, func = x => x) => promise
+const test_async = (description, promise, then_func = x => x) => promise
     .then(result => result)
     .catch(err => {
         err.message = 'Promise rejected >> ' + err.message
         throw err
     })
-    .then((result) => func(result))
+    .then((result) => then_func(result))
     .then(_ => ok_result(description))
     .catch(err => error_result(description, err))
 
@@ -87,5 +93,5 @@ let tally_results = (name, ...results) => {
     return `${name}${overview}\n${error_messages}`
 }
 
-module.exports = { assert, assert_fun, test, test_async, display_message, tally_results };
+module.exports = { assert, assert_fun, test, display_message, tally_results };
 

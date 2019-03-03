@@ -15,42 +15,42 @@
 
     let basic_tests = await Promise.all([
 
-        test_async("local root function ffetches and works",
+        test("local root function ffetches and works",
             ff('./hello-fetch.js')('forest'),
             (result_hello) => assert(result_hello, 'Hello, forest!'))
 
-        , test_async("local simple arrow expected to fail (but works @ 2019.3.3)",
+        , test("local simple arrow expected to fail (but works @ 2019.3.3)",
             ff('./tests/external/arrow-only.ts1128')(),
             (result_hello) => assert(result_hello, 'not recommended to ommit variable or ()'))
 
-        , test_async("local nested function ffetches and works",
+        , test("local nested function ffetches and works",
             ff('./tests/external/math/multiply.js')(3, 4),
             (twelve) => assert(twelve, 12))
 
-        , test_async("url path ffetches remote function",
+        , test("url path ffetches remote function",
             ff('https://gist.githubusercontent.com/devmachiine/4433df78dc698aebad5aa37be15475fa/raw/59fdf8c2031d2418539adb98dfad73fcd1469acd/add.js')(34, 16),
             (fifty) => assert(fifty, 50))
 
-        , test_async("test framework can be injected into functions",
+        , test("test framework can be injected into functions",
             ff('./tests/external/test-test.js')(test_framework),
             (test_result) => {
                 if (test_result.error) { throw test_result.error }
                 assert(test_result.description, 'test functions yield expected results')
             })
 
-        , test_async("function scope initialy set to ffetched code",
+        , test("function scope initialy set to ffetched code",
             ff('./tests/external/test-scope.js')(test_framework),
             (result) => assert(result.error, 'ReferenceError: print is not defined'))
 
-        , test_async("non-url path expects to start with './'",
-            test_async("ff without ./", ff('hello-fetch.js')('forest'), () => _na),
+        , test("non-url path expects to start with './'",
+            test("ff without ./", ff('hello-fetch.js')('forest'), () => _na),
             (result) => assert(!!result.error, true))
 
-        , test_async("syntax error in ffetch function can be caught",
+        , test("syntax error in ffetch function can be caught",
             ff('./tests/external/error-syntax.js')().catch(err => { err.x = 'caught'; return err }),
             (err) => assert(err.x, 'caught'))
 
-        , test_async("non existing function can be caught and ignored",
+        , test("non existing function can be caught and ignored",
             ff('./tests/doesnt-exist.js')().catch(err => err))
 
     ])
