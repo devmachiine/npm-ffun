@@ -8,7 +8,7 @@
 
     let ff = require('./ffetch')()
     let test_framework = {
-        test, test_async, assert, tally_results
+        test, test_async, assert, assert_fun, tally_results
     } = require('./dev-utils/test-framework')
 
     /* Test basics */
@@ -54,7 +54,7 @@
     let extra_tests = await Promise.all(
         directory_files('./tests/self-contained/')
             .filter(path => path.endsWith('.js'))
-            .map(test_path => ff(test_path)(test, assert)))
+            .map(test_path => ff(test_path)(test, assert, assert_fun)))
 
     /* Print tests results */
 

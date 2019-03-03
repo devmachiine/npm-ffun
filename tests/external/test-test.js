@@ -1,5 +1,5 @@
 (framework) => {
-    let { test, assert } = framework
+    let { test, assert, assert_fun } = framework
     let ok_test = test(`show [ok] on ok`, () => {
         let two = 2
         assert(`${two} == 2`)
@@ -16,7 +16,7 @@
     let ok_test_tests = test(`test functions yield expected results`, () => {
         let test_test = (result, expected_assert) => {
             let passed = !result.error
-            assert(`${passed === expected_assert} && '${result.description}'`)
+            assert_fun(() => passed === expected_assert, 'unexpected result in test: ' + result.description)
         }
         test_test(ok_test, true)
         test_test(err_eval, false)

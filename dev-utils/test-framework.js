@@ -1,3 +1,5 @@
+const quote_wrap = (value) => typeof value === 'string' ? `'${value}'` : value
+
 const assert = (assumption, expected) => {
     if (typeof expected !== 'undefined') {
         if (assumption !== expected)
@@ -7,7 +9,16 @@ const assert = (assumption, expected) => {
         throw `Evaluation [${assumption}]`
 }
 
-const quote_wrap = (value) => typeof value === 'string' ? `'${value}'` : value
+let assert_fun = (assumption, message) => {
+    try {
+        if (!assumption())
+            throw false
+    } catch (err) {
+        let err_prefix = err ? `!! Test failed *before* assertion --> ` + err : ''
+        let message_prefix = message ? (err_prefix ? '\n\t--> ' : '') + message : ''
+        throw `${err_prefix}${message_prefix} \n\t--> Evaluation[${assumption}]`
+    }
+}
 
 const ok_result = (description) => {
     return { description: description }
@@ -42,7 +53,7 @@ const test_async = (description, promise, func) => promise
 
 const display_message = test => {
     let prefix = test.error ? 'error' : 'ok'
-    let postfix = test.error ? ' --> ' + test.error : ''
+    let postfix = test.error ? '\n\t--> ' + test.error : ''
     return `[${prefix}] ${test.description}${postfix}`
 }
 
@@ -76,5 +87,5 @@ let tally_results = (name, ...results) => {
     return `${name}${overview}\n${error_messages}`
 }
 
-module.exports = { assert, test, test_async, display_message, tally_results };
+module.exports = { assert, assert_fun, test, test_async, display_message, tally_results };
 
