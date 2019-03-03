@@ -7,6 +7,6 @@
     return test('remote load remote',
         () => {
             assert(test_add.description, 'remote functions can load other remote functions')
-            assert(!test_add.error)
+            assert(true, !test_add.error)
         })
 }
