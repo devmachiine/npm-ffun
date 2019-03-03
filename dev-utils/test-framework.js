@@ -61,11 +61,12 @@ let tally_results = (name, ...results) => {
     }
     let ok_tests = 0, err_tests = 0, error_messages = ''
     results.forEach(result => {
-        if (result.error) {
-            error_messages += result_text(result)
-            err_tests++
-        } else if (!result.description) {
+        if (!result || !result.description) {
             error_messages += `\nNot a test result: ${result} ${JSON.stringify(result)}`
+            err_tests++
+        }
+        else if (result.error) {
+            error_messages += `\n${result_text(result)}`
             err_tests++
         }
         else ok_tests++
