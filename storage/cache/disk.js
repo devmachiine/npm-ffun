@@ -5,7 +5,7 @@ module.exports = function (cache_dir, fetch_code) {
 
     // const debug_mode = true
     const print = typeof debug_mode === 'undefined' ? () => 0 : console.log
-    
+
     if (!fs.existsSync(cache_dir)) {
         let full_dir = path.resolve(cache_dir)
         let err_text = `disk cache initialization error --> require('ffetch')(${cache_dir})\n\n`
@@ -73,6 +73,11 @@ module.exports = function (cache_dir, fetch_code) {
 
                 // file not found on disk, so we are resolving a cached dependency path, not local.
                 if (!filename.startsWith(cache_dir)) {
+                    if (!fs.existsSync(filename)) {
+                        print(`🤮 file not found ${filename}`)
+                        throw new Error(`file not found:[${filename}]`)
+                    }
+
                     print('🤮 disk invalid filepath for cached dependency')
                     throw new Error(`Invalid cache directory for file: ${filename}.
                     Expected to start with [${cache_dir}]`)

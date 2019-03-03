@@ -53,6 +53,10 @@
         , test("non existing function can be caught and ignored",
             ff('./tests/doesnt-exist.js')().catch(err => err))
 
+        , test("file not found error returned",
+            ff('./doesnt-exist.js')('forest').catch(err => '' + err),
+            (result) => assert_fun(() => result.includes('file not found')))
+
     ])
 
     /* Test behaviour from within a ffetched function */
@@ -97,6 +101,8 @@ Test  injection behavior
 [ ] injection ~ ommit injected function is ok, but replacing it in unexpected order breaks.
 
 [ ] Scope insecure test -> prove tat access to outer still possible regardless of injection
+
+// Maybe not ~ ff turns into rejected state ~ conventional expectation of Promises (caller to catch) ?
 [ ] change all throw/catch to result type (if re-use simple ~ eg add .default_value(x => undefined) prototype to ff.)
 
 fforest.
