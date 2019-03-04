@@ -1,4 +1,4 @@
-# npm-ffetch-poc
+# npm-ffetch
 
 Proof of concept for function-level dependencies.
 
