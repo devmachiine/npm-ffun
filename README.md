@@ -1,4 +1,4 @@
-# npm-ffetch
+# npm-ffun
 
 Proof of concept for function-level dependencies.
 
@@ -19,7 +19,7 @@ Your nodejs app could import just the code it needs:
 
 ```javascript
 // require ffetch with defaults()
-const ff = require('ffetch')()
+const ff = require('ffun')()
 
 // url (or local file path) to our dependency
 let path = 'https://example.com/url/math/addition-1992.js'

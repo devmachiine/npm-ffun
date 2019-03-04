@@ -1,0 +1,25 @@
+{
+  "name": "ffun",
+  "version": "2019.3.1",
+  "description": "Proof of concept for function-level dependencies",
+  "main": "ffetch.js",
+  "files": [
+    "/storage",
+    "ffun.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devmachiine/npm-ffetch.git"
+  },
+  "keywords": [
+    "function",
+    "package",
+    "dependency"
+  ],
+  "author": "devmachiine",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/devmachiine/npm-ffetch/issues"
+  },
+  "homepage": "https://github.com/devmachiine/npm-ffetch#readme"
+}
