@@ -4,8 +4,13 @@ const assert = (assumption, expected) => {
     if (typeof expected !== 'undefined') {
         if (assumption !== expected)
             throw `Evaluation [${quote_wrap(assumption)}] === [${quote_wrap(expected)}]`
-    }else if(typeof assumption !== 'string'){
-        throw 'Use assert(boolean, !!something) to assert truthy values. (PEP 20 ~ explicit is better than implicit)'
+    } else if (typeof assumption !== 'string') {
+        let unexpected_type_message =
+            `Use assert(boolean, !!something) to assert truthy values.
+        (PEP 20 ~ explicit is better than implicit)
+        
+        Did you intend to use assert_fun([name,] function) ?`
+        throw unexpected_type_message
     }
     else if (!eval(assumption))
         throw `Evaluation [${assumption}]`
@@ -27,10 +32,10 @@ const ok_result = (description) => {
 }
 
 const error_result = (description, err) => {
+    let stack = err.stack ? '\nstack:\n' + err.stack : ''
     return {
         description: description,
-        error: '' + err,
-        error_stack: err.stack
+        error: '' + err + stack
     }
 }
 
@@ -59,16 +64,10 @@ const test_async = (description, promise, then_func = x => x) => promise
     .then(_ => ok_result(description))
     .catch(err => error_result(description, err))
 
-const display_message = test => {
-    let prefix = test.error ? 'error' : 'ok'
-    let postfix = test.error ? '\n\t--> ' + test.error : ''
-    return `[${prefix}] ${test.description}${postfix}`
-}
-
-const result_text = test_result => {
-    let short_message = display_message(test_result)
-    let postfix_stack = test_result.error_stack ? '\nstack:\n' + test_result.error_stack : ''
-    return `${short_message}${postfix_stack}`
+const result_text = result => {
+    let prefix = result.error ? 'error' : 'ok'
+    let postfix = result.error ? '\n\t--> ' + result.error : ''
+    return `[${prefix}] ${result.description}${postfix}`
 }
 
 let tally_results = (name, ...results) => {
@@ -95,5 +94,5 @@ let tally_results = (name, ...results) => {
     return `${name}${overview}\n${error_messages}`
 }
 
-module.exports = { assert, assert_fun, test, display_message, tally_results };
+module.exports = { assert, assert_fun, test, tally_results, result_text };
 

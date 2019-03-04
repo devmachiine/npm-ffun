@@ -40,7 +40,7 @@
 
         , test("function scope initialy set to ffetched code",
             ff('./tests/external/test-scope.js')(test_framework),
-            (result) => assert(result.error, 'ReferenceError: print is not defined'))
+            (result) => assert_fun(() => result.error.startsWith('ReferenceError: print is not defined')))
 
         , test("non-url path expects to start with './'",
             test("ff without ./", ff('hello-fetch.js')('forest'), () => _na),
