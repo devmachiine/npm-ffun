@@ -1,8 +1,8 @@
 {
   "name": "ffun",
-  "version": "2019.3.1",
+  "version": "2019.3.2",
   "description": "Proof of concept for function-level dependencies",
-  "main": "ffetch.js",
+  "main": "index.js",
   "files": [
     "/storage",
     "ffun.js"

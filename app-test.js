@@ -6,7 +6,7 @@
     print('_'.repeat(65))
     let start_time = new Date().getTime();
 
-    let ff = require('./ffun')()
+    let ff = require('.')()
     let test_framework = {
         test, test_async, assert, assert_fun, tally_results
     } = require('./dev-utils/test-framework')
