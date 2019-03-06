@@ -116,10 +116,12 @@ module.exports = function (fetch_code, root_dir) {
                 print('f&b.resource = ' + resource)
                 let code = '' + await fetch_code(resource)
                 // print('f&b.code = ' + code.length)
-                let func = await build(code, fetch_and_build, resource)
+                let func = build(code, fetch_and_build, resource)
                 print('f&b.func = ' + func.toString().length)
 
                 return func(...funcArgs)
+
+                // return build.then(f => f(...funcArgs))
 
             } catch (err) {
                 print(`🎣 ffetch error: [${err}]\n${JSON.stringify(err)}`)
