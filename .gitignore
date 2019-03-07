@@ -2,3 +2,5 @@
 nano_modules/
 # pretty-print file to inspect json
 dev-utils/temp.json
+# module dependencies
+node_modules

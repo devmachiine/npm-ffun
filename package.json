@@ -10,6 +10,9 @@
     "/storage",
     "ffun.js"
   ],
+  "devDependencies": {
+    "t3st": "2019.3.7"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/devmachiine/npm-ffetch.git"
