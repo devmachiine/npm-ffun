@@ -93,7 +93,7 @@ module.exports = function (fetch_code, root_dir) {
         // code that doesn't start with expression gives -> SyntaxError: Unexpected token (
 
         try {
-            let fun = (new Function(`return ((ff) => (async ${code}\n))`))()(ff$(resource));
+            let fun = (new Function(`"use strict";return ((ff) => (async ${code}\n))`))()(ff$(resource));
             return fun
         } catch (err) {
             err.message = `ffetch.build :: function error [${resource}] --> ${err.message}`
