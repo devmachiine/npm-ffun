@@ -1,21 +1,12 @@
 {
     "emeraldwalk.runonsave": {
-        "autoClearConsole" : true,
+        "autoClearConsole": true,
         "commands": [
             {
                 "match": "\\.js$",
-                // "match": ".*",
                 //"isAsync": true,
                 "cmd": "node ${workspaceRoot}\\app-test.js"
-            }/*,
-            {
-                "match": "\\.txt$",
-                "cmd": "echo 'I am a .txt file ${file}.'"
-            },
-            {
-                "match": "\\.js$",
-                "cmd": "echo 'I am a .js file ${file}.'"
-            }*/
+            }
         ]
     }
 }
