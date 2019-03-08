@@ -61,16 +61,26 @@
 
     /* Test behaviour from within a ffetched function */
 
-    const directory_files = require('./dev-utils/directory-file-list')
-
     const perform_test = (test_path) =>
         ff(test_path)(test, assert, assert_fun)
             .catch(err => { return { description: test_path, error: 'bzzk: ' + err } })
 
-    const extra_tests = await Promise.all(
-        directory_files('./tests/self-contained/')
-            .filter(path => path.endsWith('.js'))
-            .map(perform_test))
+    let path = require('path')
+    let fs = require('fs')
+
+    let root_dir = path.dirname(require.main.filename)
+    let tests_dir = path.join(root_dir, './tests/self-contained/')
+
+    const dir_contents = (dir) => fs.statSync(dir).isFile() ? []
+        : fs.readdirSync(dir).map(sub_path => path.join(dir, sub_path))
+
+    const tree_leaves = ff('./dev-utils/tree-filter-leaves.js')
+
+    const test_files = await tree_leaves(tests_dir, dir_contents)
+
+    const extra_tests = await Promise.all(test_files
+        .filter(path => path.endsWith('.js'))
+        .map(perform_test))
 
     /* Print tests results */
 
