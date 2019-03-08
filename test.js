@@ -2,18 +2,18 @@
 
     /*  Setup */
 
-    let print = console.log
-    print('_'.repeat(65))
-    let start_time = new Date().getTime();
+    const show = console.log
+    show('_'.repeat(65))
+    const start_time = new Date().getTime();
 
-    let ff = require('.')()
-    let test_framework = {
+    const ff = require('.')()
+    const test_framework = {
         test, test_async, assert, assert_fun, tally_results
     } = require('t3st')
 
     /* Test basics */
 
-    let basic_tests = await Promise.all([
+    const basic_tests = await Promise.all([
 
         test("local root function ffetches and works",
             ff('./hello-fetch.js')('forest'),
@@ -61,26 +61,26 @@
 
     /* Test behaviour from within a ffetched function */
 
-    let directory_files = require('./dev-utils/directory-file-list')
+    const directory_files = require('./dev-utils/directory-file-list')
 
-    let perform_test = (test_path) =>
+    const perform_test = (test_path) =>
         ff(test_path)(test, assert, assert_fun)
             .catch(err => { return { description: test_path, error: 'bzzk: ' + err } })
 
-    let extra_tests = await Promise.all(
+    const extra_tests = await Promise.all(
         directory_files('./tests/self-contained/')
             .filter(path => path.endsWith('.js'))
             .map(perform_test))
 
     /* Print tests results */
 
-    print(tally_results('Basic', ...basic_tests))
-    print(tally_results('Extra', ...extra_tests))
+    show(tally_results('Basic', ...basic_tests))
+    show(tally_results('Extra', ...extra_tests))
 
-    let end_time = new Date().getTime()
-    let elapsed = end_time - start_time
-    print(`Completed in ~ ${elapsed} ms`)
-    print('_'.repeat(65))
+    const end_time = new Date().getTime()
+    const elapsed = end_time - start_time
+    show(`Runtime ~ ${elapsed} ms`)
+    show('_'.repeat(65))
 
 })().catch(err => {
     console.log('🎣 🦖 app-test err!\n')

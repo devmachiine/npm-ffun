@@ -3,7 +3,7 @@
   "version": "2019.3.2",
   "description": "Proof of concept for function-level dependencies",
   "scripts": {
-    "test": "node app-test.js"
+    "test": "node test.js"
   },
   "main": "index.js",
   "files": [
@@ -11,7 +11,7 @@
     "ffun.js"
   ],
   "devDependencies": {
-    "t3st": "2019.3.7"
+    "t3st": "2019.3.8"
   },
   "repository": {
     "type": "git",

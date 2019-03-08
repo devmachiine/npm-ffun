@@ -4,8 +4,7 @@
         "commands": [
             {
                 "match": "\\.js$",
-                //"isAsync": true,
-                "cmd": "node ${workspaceRoot}\\app-test.js"
+                "cmd": "node ${workspaceRoot}\\test.js"
             }
         ]
     }
