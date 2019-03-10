@@ -35,12 +35,12 @@
             ff('./tests/external/test-test.js')(test_framework),
             (test_result) => {
                 if (test_result.error) { throw test_result.error }
-                assert(test_result.description, 'test functions yield expected results')
+                assert(test_result.description, 'test passed')
             })
 
         , test("function scope initialy set to ffetched code",
             ff('./tests/external/test-scope.js')(test_framework),
-            (result) => assert_fun(() => result.error.startsWith('ReferenceError: print is not defined')))
+            (result) => assert_fun(() => result.error.toString().startsWith('ReferenceError: print is not defined')))
 
         , test("non-url path expects to start with './'",
             test("ff without ./", ff('hello-fetch.js')('forest'), () => _na),
@@ -71,12 +71,12 @@
     let root_dir = path.dirname(require.main.filename)
     let tests_dir = path.join(root_dir, './tests/self-contained/')
 
-    const dir_contents = (dir) => fs.statSync(dir).isFile() ? []
+    const sub_paths = (dir) => fs.statSync(dir).isFile() ? []
         : fs.readdirSync(dir).map(sub_path => path.join(dir, sub_path))
 
     const tree_leaves = ff('./dev-utils/tree-filter-leaves.js')
 
-    const test_files = await tree_leaves(tests_dir, dir_contents)
+    const test_files = await tree_leaves(tests_dir, sub_paths)
 
     const extra_tests = await Promise.all(test_files
         .filter(path => path.endsWith('.js'))

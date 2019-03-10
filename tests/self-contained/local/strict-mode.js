@@ -4,6 +4,6 @@
     })
     return test("strict mode is enabled", () => {
         assert(!!strict.error, true)
-        assert(strict.error.startsWith("ReferenceError: a is not defined"), true)
+        assert(strict.error.toString().startsWith("ReferenceError: a is not defined"), true)
     })
 }

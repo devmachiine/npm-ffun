@@ -9,7 +9,7 @@
 
     return test('local functions can send functions to other functions',
         () => {
-            assert(`${twenty_four} == 24`)
-            assert(`${twenty_four} === ${non_async_hof_awaited_without_error}`)
+            assert(twenty_four, 24)
+            assert(twenty_four, non_async_hof_awaited_without_error)
         })
 }
