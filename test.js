@@ -8,7 +8,7 @@
 
     const ff = require('.')()
     const test_framework = {
-        test, test_async, assert, assert_fun, tally_results
+        test, test_async, assert, affirm, tally_results
     } = require('t3st')
 
     /* Test basics */
@@ -40,7 +40,7 @@
 
         , test("function scope initialy set to ffetched code",
             ff('./tests/external/test-scope.js')(test_framework),
-            (result) => assert_fun(() => result.error.toString().startsWith('ReferenceError: print is not defined')))
+            (result) => affirm(() => result.error.toString().startsWith('ReferenceError: print is not defined')))
 
         , test("non-url path expects to start with './'",
             test("ff without ./", ff('hello-fetch.js')('forest'), () => _na),
@@ -55,14 +55,14 @@
 
         , test("file not found error returned",
             ff('./doesnt-exist.js')('forest').catch(err => '' + err),
-            (result) => assert_fun(() => result.includes('file not found')))
+            (result) => affirm(() => result.includes('file not found')))
 
     ])
 
     /* Test behaviour from within a ffetched function */
 
     const perform_test = (test_path) =>
-        ff(test_path)(test, assert, assert_fun)
+        ff(test_path)(test, assert, affirm)
             .catch(err => { return { description: test_path, error: 'bzzk: ' + err } })
 
     let path = require('path')

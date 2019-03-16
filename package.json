@@ -11,7 +11,7 @@
     "ffun.js"
   ],
   "devDependencies": {
-    "t3st": "^2019.3.10"
+    "t3st": "^2019.3.16"
   },
   "repository": {
     "type": "git",

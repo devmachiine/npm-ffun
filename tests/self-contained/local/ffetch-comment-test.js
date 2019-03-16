@@ -1,4 +1,4 @@
-(test, assert, assert_fun) => {
+(test, assert, affirm) => {
     let comments_ok = await ff('./tests/external/ok-test-comment.js')()
 
     let comments_error = 'ok'
@@ -19,8 +19,9 @@
             assert(comments_ok, 'ok')
 
             expected_build_errors.forEach(build_error => {
-                assert_fun(() => comments_error.message.includes(build_error),
-                    `expected |${build_error}| within |${comments_error}|`)
+                affirm(`expected |${build_error}| within |${comments_error}|`,
+                    () => comments_error.message.includes(build_error)
+                )
             })
 
         })
