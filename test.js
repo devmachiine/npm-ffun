@@ -97,7 +97,7 @@
     console.log(err.stack ? err.stack : '' + err)
 })
 
-/*  pending tests:
+/*  pending tests
 [x] local load local
 [x] local load remote
 [x] remote load remote
@@ -112,10 +112,20 @@ Test  injection behavior
 
 [ ] Scope insecure test -> prove tat access to outer still possible regardless of injection
 
+// Todo's
+
+[ ] Change all sync file operations to async.
+
+// Maybe
+[ ] Fire & forget write queue to disk, all awaited/killed when program stops.
+
 // Maybe not ~ ff turns into rejected state ~ conventional expectation of Promises (caller to catch) ?
 [ ] change all throw/catch to result type (if re-use simple ~ eg add .default_value(x => undefined) prototype to ff.)
 
-fforest.
+
+[ ] Remove reamde info about fforest, to fforest.
+
+fforest. <- move to project.
 [ ] maybe - dependency upgrade, or signal ~ if it's to be part of this POC.
 
 */
