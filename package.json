@@ -1,6 +1,6 @@
 {
   "name": "ffun",
-  "version": "2019.3.2",
+  "version": "2019.3.22",
   "description": "Proof of concept for function-level dependencies",
   "scripts": {
     "test": "node test.js"
@@ -11,7 +11,7 @@
     "ffun.js"
   ],
   "devDependencies": {
-    "t3st": "^2019.3.16"
+    "t3st": "^2019.3.20"
   },
   "repository": {
     "type": "git",
