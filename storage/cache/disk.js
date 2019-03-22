@@ -27,13 +27,14 @@ module.exports = function (cache_dir, fetch_code) {
         // todo restructure to clarify.
     })
 
-    let disk_add = (file_path, value) => new Promise((resolve, reject) => {
+    let disk_add = (file_path, temp_path, value) => new Promise((resolve, reject) => {
         try {
             let file_dir = path.dirname(file_path)
             if (!fs.existsSync(file_dir)) {
                 fs.mkdirSync(file_dir, { recursive: true })
             }
-            fs.writeFileSync(file_path, value)
+            fs.writeFileSync(temp_path, value)
+            fs.renameSync(temp_path, file_path)
             resolve(value)
         }
         catch (err) {
@@ -59,6 +60,7 @@ module.exports = function (cache_dir, fetch_code) {
     let lookup = dependency => {
 
         let filename = file_path(dependency)
+        let tempname = filename + '.temp'
         print('disk lookup: ' + dependency)
         print('disk file request: ' + filename)
         print('disk file request: ' + path.resolve(filename))
@@ -83,7 +85,7 @@ module.exports = function (cache_dir, fetch_code) {
                     Expected to start with [${cache_dir}]`)
                 }
 
-                return fetch_code(dependency).then((val) => disk_add(filename, val))
+                return fetch_code(dependency).then((val) => disk_add(filename, tempname, val))
             }
 
         })
