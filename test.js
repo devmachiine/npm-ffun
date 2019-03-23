@@ -122,6 +122,9 @@ Test  injection behavior
 // Maybe not ~ ff turns into rejected state ~ conventional expectation of Promises (caller to catch) ?
 [ ] change all throw/catch to result type (if re-use simple ~ eg add .default_value(x => undefined) prototype to ff.)
 
+// Maybe sandbox:
+// eg, hide all available functions in scope like global = {}
+
 
 [ ] Remove reamde info about fforest, to fforest.
 
